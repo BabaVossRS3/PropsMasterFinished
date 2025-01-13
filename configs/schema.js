@@ -22,6 +22,7 @@ export const ProductListing = pgTable('ProductListing', {
     userImageUrl: varchar('userImageUrl'),
     userPlan: varchar('userPlan'),
     clerkUserId: varchar('userIdClerk').references(() => UserPlan.userId), // Foreign key to UserPlan.userId
+    views: integer('views').notNull().default(0),
 });
 
 // ProductImages Table
@@ -38,7 +39,8 @@ export const UserPlan = pgTable('UserPlan', {
     userId: varchar('userId').notNull().unique(),
     plan: varchar('plan').notNull(),
     startDate: date('startDate').notNull().default(sql`CURRENT_DATE`),
-    endDate: date('endDate').default(sql`CURRENT_DATE + INTERVAL '30 days'`),
+    // Remove the default for endDate since we'll calculate it based on plan type
+    endDate: date('endDate'),
     isActive: boolean('isActive').notNull().default(true)
 });
 

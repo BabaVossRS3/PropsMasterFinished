@@ -8,7 +8,6 @@ const OwnersDetails = ({ productDetail }) => {
     <div className="p-10 border rounded-xl shadow-md mt-7">
       <h2 className="text-2xl mb-5">Πωλητής</h2>
       <div className="flex gap-5">
-        {/* Use the user's image from the userImageUrl */}
         <img
           src={productDetail && productDetail.userImageUrl ? productDetail?.userImageUrl : 'src/assets/freepik__background__18490.png'}
           className="w-[70px] h-[70px] rounded-full"
@@ -22,8 +21,15 @@ const OwnersDetails = ({ productDetail }) => {
       </div>
       <Separator />
       <div className="flex gap-10 mt-5 items-center">
+        <h2 className="text-2xl">Διεύθυνση:</h2>
+        <h2 className="font-medium text-xl text-[#242424]">
+          {productDetail?.addressPosted}
+        </h2>
+      </div>
+      <Separator className="my-4" />
+      <div className="flex gap-10 mt-5 items-center">
         <h2 className="text-2xl">Τηλέφωνο:</h2>
-        <h2 className="font-medium text-xl ">
+        <h2 className="font-light text-xl">
           <a
             href={`tel:+${productDetail?.ownerTel}`}
             className="text-[#242424] hover:scale-105 hover:text-[#E78430] transition-all no-underline"
@@ -32,6 +38,8 @@ const OwnersDetails = ({ productDetail }) => {
           </a>
         </h2>
       </div>
+      
+     
     </div>
   );
 };

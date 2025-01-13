@@ -49,53 +49,37 @@ export async function updateUserPlan(userId, newPlan) {
     }
 }
 
-export async function getCurrentUserPlan(userId) {
+export const getCurrentUserPlan = async (userId) => {
     try {
-        const activePlan = await db
-            .select()
-            .from(UserPlan)
-            .where(
-                and(
-                    eq(UserPlan.userId, userId),
-                    eq(UserPlan.isActive, true)
-                )
-            )
-            .orderBy(desc(UserPlan.startDate))
-            .limit(1);
-
-        if (activePlan.length > 0) {
-            const plan = activePlan[0];
-            const now = new Date();
-            const endDate = new Date(plan.endDate);
-
-            // Calculate remaining days
-            const remainingDays = Math.max(
-                Math.ceil((endDate - now) / (1000 * 60 * 60 * 24)),
-                0
-            );
-
-            // If the plan has expired, deactivate it
-            if (remainingDays === 0) {
-                await db
-                    .update(UserPlan)
-                    .set({ isActive: false })
-                    .where(eq(UserPlan.id, plan.id));
-
-                return null;
-            }
-
-            return {
-                ...plan,
-                remainingDays
-            };
-        }
-
-        return null;
+      const result = await db
+        .select()
+        .from(UserPlan)
+        .where(eq(UserPlan.userId, userId))
+        .limit(1);
+  
+      if (result && result[0]) {
+        const plan = result[0];
+        const now = new Date();
+        const endDate = new Date(plan.endDate);
+        const remainingDays = Math.max(
+          0,
+          Math.ceil((endDate - now) / (1000 * 60 * 60 * 24))
+        );
+  
+        return {
+          plan: plan.plan,
+          isActive: plan.isActive && remainingDays > 0,
+          remainingDays,
+          startDate: plan.startDate,
+          endDate: plan.endDate
+        };
+      }
+      return null;
     } catch (error) {
-        console.error('Error fetching current user plan:', error);
-        throw error;
+      console.error('Error fetching user plan:', error);
+      throw error;
     }
-}
+  };
 
 export async function fixUserPlanStatus(userId) {
     try {

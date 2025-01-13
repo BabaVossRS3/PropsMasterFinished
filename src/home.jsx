@@ -4,6 +4,7 @@ import Hero from './components/Hero'
 import Category from './components/Category'
 import MostSearched from './components/MostSearched'
 import Footer from './components/Footer'
+import PromotedProducts from './components/PromotedProducts'
 
 const Home = () => {
   return (
@@ -14,6 +15,8 @@ const Home = () => {
       <Hero/>
       {/* { Κατηγοριες εικονιδιων κατω απο hero } */}
       <Category/>
+      {/* Promoted */}
+      <PromotedProducts/>
       {/* most searched */}
       <MostSearched/>
       {/* {Footer} */}

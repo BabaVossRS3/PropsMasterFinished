@@ -1,5 +1,4 @@
-// src/pages/SubscriptionSuccess.jsx
-// src/pages/SubscriptionSuccess.jsx
+// SuccessPage.jsx
 import React, { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useToast } from "@/hooks/use-toast";
@@ -16,7 +15,7 @@ const SubscriptionSuccess = () => {
     if (sessionId) {
       verifySubscription(sessionId);
     }
-  }, []);
+  }, [searchParams]);
 
   const verifySubscription = async (sessionId) => {
     try {
@@ -28,7 +27,12 @@ const SubscriptionSuccess = () => {
         body: JSON.stringify({ sessionId }),
       });
 
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
       const data = await response.json();
+      
       if (data.success) {
         // Set the user's plan in context
         setUserPlan(data.planType);
@@ -50,6 +54,8 @@ const SubscriptionSuccess = () => {
           default:
             navigate('/BasicListing');
         }
+      } else {
+        throw new Error(data.error || 'Failed to verify subscription');
       }
     } catch (error) {
       console.error('Error verifying subscription:', error);

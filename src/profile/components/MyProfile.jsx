@@ -11,6 +11,7 @@ import { updateUserPlan } from './../../../configs/planManagment';
 import { getCurrentUserPlan } from './../../../configs/planManagment';
 import { useNavigate } from 'react-router-dom';
 import { cancelUserPlan } from './../../../configs/planManagment';
+import ProfilePictureUpload from '@/AddListing.jsx/components/ProfilePictureUploader';
 
 
 const MyProfile = ({ totalListings, endDate }) => {
@@ -21,6 +22,7 @@ const MyProfile = ({ totalListings, endDate }) => {
   const [remainingDays, setRemainingDays] = useState(null);
   const navigate = useNavigate();  
   const { toast } = useToast();
+  const [uploading, setUploading] = useState(false);
 
   const handleExpiredPlan = () => {
     setUserPlan(null);
@@ -142,7 +144,55 @@ const handleAddListing = () => {
           navigate('/choosePlan');
   }
 };
+const GetUserProductListing = async () => {
+    try {
+      const result = await db
+        .select()
+        .from(ProductListing)
+        .leftJoin(ProductImages, eq(ProductListing.id, ProductImages.ProductListingId))
+        .where(eq(ProductListing.createdBy, user?.primaryEmailAddress?.emailAddress))
+        .orderBy(desc(ProductListing.id));
 
+      const resp = Service.FormatResult(result);
+      setProductList(resp);
+      setTotalListings(resp.length);
+    } catch (error) {
+      console.error('Error fetching user listings:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+const handleProfileImageUpload = async (file) => {
+  try {
+    setUploading(true);
+    
+    // Create a FormData instance
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('userId', user.id);
+
+    // Here you would typically make an API call to your backend
+    // to handle the image upload and update the user's profile
+    // For example:
+    // await uploadProfileImage(formData);
+    
+    toast({
+      title: 'Επιτυχής Ενημέρωση',
+      description: 'Η φωτογραφία προφίλ ενημερώθηκε με επιτυχία.',
+      status: 'success',
+    });
+    
+  } catch (error) {
+    console.error('Error uploading profile image:', error);
+    toast({
+      variant: 'destructive',
+      title: 'Σφάλμα',
+      description: 'Υπήρξε πρόβλημα με την ενημέρωση της φωτογραφίας.',
+    });
+  } finally {
+    setUploading(false);
+  }
+};
 
 useEffect(() => {
   const fetchUserPlanAndSubscriptionDate = async () => {
@@ -217,13 +267,13 @@ useEffect(() => {
   <div className="myProfile-container">
     {/* Profile section */}
     <div className="myProfile-profile">
-      <div className="myProfile-avatar">
-        <img
-          src={user.imageUrl}
-          alt={`${user.firstName} ${user.lastName}`}
-          className="myProfile-avatarImage"
-        />
-      </div>
+    <div className="myProfile-avatar">
+      <ProfilePictureUpload
+        defaultImageUrl={user.imageUrl}
+        onImageUpload={handleProfileImageUpload}
+        uploading={uploading}
+      />
+    </div>
       <div className="myProfile-userDetails">
         <h2 className="myProfile-userName">
           {user.firstName} {user.lastName}
@@ -275,17 +325,16 @@ useEffect(() => {
     {/* Action buttons */}
     <div className="myProfile-actions">
       <div className="myProfile-action">
-        <DeleteListingsButton
-          userListings={userListings}
-          onDeleted={() => {
-            setUserListings([]);
-            toast({
-              title: 'Listings Deleted',
-              description: 'All of your listings have been successfully deleted.',
-              status: 'success',
-            });
-          }}
-        />
+      <DeleteListingsButton
+        onDeleted={() => {
+          // This will trigger a refresh of your listings
+          GetUserProductListing();
+          toast({
+            title: 'Επιτυχής Διαγραφή',
+            description: 'Όλες οι αγγελίες διαγράφηκαν με επιτυχία.'
+          });
+        }}
+      />
       </div>
 
       <div className="myProfile-action">

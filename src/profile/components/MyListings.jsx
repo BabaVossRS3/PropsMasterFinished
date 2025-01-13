@@ -17,8 +17,22 @@ const MyListings = ({ setTotalListings }) => {
   const [productList, setProductList] = useState([]);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
-  const { userPlan, setUserPlan } = useUserPlan(); // Make sure we get setUserPlan too
+  const { userPlan, setUserPlan } = useUserPlan();
   const navigate = useNavigate();
+
+  // Function to get the edit route based on user plan
+  const getEditRoute = () => {
+    switch (userPlan) {
+      case 'Basic':
+        return '/BasicListing';
+      case 'Boost':
+        return '/BoostListing';
+      case 'Boost+':
+        return '/BoostPlusListing';
+      default:
+        return '/BasicListing';
+    }
+  };
 
   useEffect(() => {
     if (user) {
@@ -36,8 +50,7 @@ const MyListings = ({ setTotalListings }) => {
 
       if (result.length > 0) {
         const fetchedPlan = result[0].plan;
-        // Update both local state and context
-        setUserPlan(fetchedPlan); // Update the context
+        setUserPlan(fetchedPlan);
       }
     } catch (error) {
       console.error('Error fetching user plan:', error);
@@ -64,8 +77,6 @@ const MyListings = ({ setTotalListings }) => {
   };
 
   const handleAddListing = () => {
-
-    // Check if user has a plan
     if (!userPlan) {
       toast({
         title: "Απαιτείται Συνδρομή",
@@ -76,7 +87,6 @@ const MyListings = ({ setTotalListings }) => {
       return;
     }
 
-    // Check listing limits based on plan
     if (userPlan === 'Basic' && productList.length >= 5) {
       toast({
         variant: "destructive",
@@ -97,20 +107,7 @@ const MyListings = ({ setTotalListings }) => {
       return;
     }
 
-    // Navigate based on plan
-    switch (userPlan) {
-      case 'Basic':
-        navigate('/BasicListing');
-        break;
-      case 'Boost':
-        navigate('/BoostListing');
-        break;
-      case 'Boost+':
-        navigate('/BoostPlusListing');
-        break;
-      default:
-        navigate('/BasicListing');
-    }
+    navigate(getEditRoute());
   };
 
   if (loading) {
@@ -136,7 +133,7 @@ const MyListings = ({ setTotalListings }) => {
           <div key={index} className="myListings-item">
             <ProductItem className="myListings-productItem" product={item} />
             <div className="myListings-actions">
-              <Link to={`/BasicListing?mode=edit&id=${item.id}`} className="myListings-link">
+              <Link to={`${getEditRoute()}?mode=edit&id=${item.id}`} className="myListings-link">
                 <Button className="myListings-editButton">
                   Επεξεργασία
                 </Button>

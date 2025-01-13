@@ -1,88 +1,123 @@
-export const CategoriesList=[
-    {
-        id:1,
-        name:'Έπιπλα',
-        icon:'src/assets/chest-of-drawers.png'
-    },
-    {
-        id:2,
-        name:'Ζωγραφική & Τέχνη',
-        icon:'src/assets/starry-night.png'
+// export const CategoriesList=[
+//     {
+//         id:1,
+//         name:'Έπιπλα',
+//         icon:'src/assets/chest-of-drawers.png'
+//     },
+//     {
+//         id:2,
+//         name:'Ζωγραφική & Τέχνη',
+//         icon:'src/assets/starry-night.png'
 
-    },
-    {
-        id:3,
-        name:'Μικροαντικείμενα & Διακοσμητικά',
-        icon:'src/assets/lamp-decor.png'
+//     },
+//     {
+//         id:3,
+//         name:'Μικροαντικείμενα & Διακοσμητικά',
+//         icon:'src/assets/lamp-decor.png'
 
-    },
-    {
-        id:4,
-        name:'Κοσμήματα & Ρολόγια',
-        icon:'src/assets/necklace.png'
+//     },
+//     {
+//         id:4,
+//         name:'Κοσμήματα & Ρολόγια',
+//         icon:'src/assets/necklace.png'
 
-    },
-    {
-        id:5,
-        name:'Μεταλλικά Αντικείμενα',
-        icon:'src/assets/camera-crane.png'
+//     },
+//     {
+//         id:5,
+//         name:'Μεταλλικά Αντικείμενα',
+//         icon:'src/assets/camera-crane.png'
 
-    },
-    {
-        id:6,
-        name:'Αντίκες από Κεραμικά & Γυαλί',
-        icon:'src/assets/mirror.png'
+//     },
+//     {
+//         id:6,
+//         name:'Αντίκες από Κεραμικά & Γυαλί',
+//         icon:'src/assets/mirror.png'
 
-    },
-    {
-        id:7,
-        name:'Χειροποίητες Αντίκες',
-        icon:'src/assets/handcraft.png'
+//     },
+//     {
+//         id:7,
+//         name:'Χειροποίητες Αντίκες',
+//         icon:'src/assets/handcraft.png'
 
-    },
-    {
-        id:8,
-        name:'Συλλογές & Μνημεία',
-        icon:'src/assets/statue.png'
+//     },
+//     {
+//         id:8,
+//         name:'Συλλογές & Μνημεία',
+//         icon:'src/assets/statue.png'
 
-    },
-    {
-        id:9,
-        name:'Αντίκες Ρούχων & Υφασμάτων',
-        icon:'src/assets/wardrobe.png'
+//     },
+//     {
+//         id:9,
+//         name:'Αντίκες Ρούχων & Υφασμάτων',
+//         icon:'src/assets/wardrobe.png'
 
-    },
-    {
-        id:10,
-        name:'Αναμνηστικά & Σπάνια Αντικείμενα',
-        icon:'src/assets/crystal.png'
+//     },
+//     {
+//         id:10,
+//         name:'Αναμνηστικά & Σπάνια Αντικείμενα',
+//         icon:'src/assets/crystal.png'
 
-    },
-    {
-        id:11,
-        name:'Αντίκες Οικιακών Σκευών',
-        icon:'src/assets/household-appliance.png'
+//     },
+//     {
+//         id:11,
+//         name:'Αντίκες Οικιακών Σκευών',
+//         icon:'src/assets/household-appliance.png'
 
-    },
-    {
-        id:12,
-        name:'Βιβλία & Χάρτες',
-        icon:'src/assets/open-book.png'
+//     },
+//     {
+//         id:12,
+//         name:'Βιβλία & Χάρτες',
+//         icon:'src/assets/open-book.png'
 
-    },
-    {
-        id:13,
-        name:'Αρχαιολογικά Αντικείμενα',
-        icon:'src/assets/vase.png'
+//     },
+//     {
+//         id:13,
+//         name:'Αρχαιολογικά Αντικείμενα',
+//         icon:'src/assets/vase.png'
 
-    },
-    {
-        id:14,
-        name:'Αντίκες Σαπούνι & Κεριά',
-        icon:'src/assets/candle.png'
+//     },
+//     {
+//         id:14,
+//         name:'Αντίκες Σαπούνι & Κεριά',
+//         icon:'src/assets/candle.png'
 
-    },
-]
+//     },
+// ]
+import chestOfDrawers from '../assets/chest-of-drawers.png';
+import starryNight from '../assets/starry-night.png';
+import lampDecor from '../assets/lamp-decor.png';
+import necklace from '../assets/necklace.png';
+import cameraCrane from '../assets/camera-crane.png';
+import mirror from '../assets/mirror.png';
+import handcraft from '../assets/handcraft.png';
+import statue from '../assets/statue.png';
+import wardrobe from '../assets/wardrobe.png';
+import crystal from '../assets/crystal.png';
+import householdAppliance from '../assets/household-appliance.png';
+import openBook from '../assets/open-book.png';
+import vase from '../assets/vase.png';
+import candle from '../assets/candle.png';
+
+// Import other icons similarly...
+
+export const CategoriesList = [
+  { id: 1, name: 'Έπιπλα', icon: chestOfDrawers },
+  { id: 2, name: 'Ζωγραφική & Τέχνη', icon: starryNight },
+  { id: 3, name: 'Μικροαντικείμενα & Διακοσμητικά', icon: lampDecor },
+  { id: 4, name: 'Κοσμήματα & Ρολόγια', icon: necklace },
+  { id: 5, name: 'Μεταλλικά Αντικείμενα', icon: cameraCrane },
+  { id: 6, name: 'Αντίκες από Κεραμικά & Γυαλί', icon: mirror },
+  { id: 7, name: 'Χειροποίητες Αντίκες', icon: handcraft },
+  { id: 8, name: 'Συλλογές & Μνημεία', icon: statue },
+  { id: 9, name: 'Αντίκες Ρούχων & Υφασμάτων', icon: wardrobe },
+  { id: 10, name: 'Αναμνηστικά & Σπάνια Αντικείμενα', icon: crystal },
+  { id: 11, name: 'Αντίκες Οικιακών Σκευών', icon: householdAppliance },
+  { id: 12, name: 'Βιβλία & Χάρτες', icon: openBook },
+  { id: 13, name: 'Αρχαιολογικά Αντικείμενα', icon: vase },
+  { id: 14, name: 'Αντίκες Σαπούνι & Κεριά', icon: candle },
+];
+
+
 
 export const PriceSell = [
     {

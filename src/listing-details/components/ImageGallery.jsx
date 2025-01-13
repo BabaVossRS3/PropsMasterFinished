@@ -1,40 +1,3 @@
-// import React, { useState } from 'react';
-
-// const ImageGallery = ({ productDetail }) => {
-//   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-
-//   const images = productDetail?.images || [];
-
-//   return (
-//     <div className="image-gallery flex flex-col md:flex-row  md:items-center gap-4">
-//       {/* Thumbnail navigation */}
-//       <div className="thumbnail-container h-full  flex  md:flex-col  gap-2">
-//         {images.map((image, index) => (
-//           <img
-//             key={index}
-//             src={image.imageUrl}
-//             className={`w-20 h-20 object-cover rounded-lg cursor-pointer border-2 ${
-//               selectedImageIndex === index ? 'border-orange-500' : 'border-gray-300'
-//             }`}
-//             alt={`Thumbnail ${index + 1}`}
-//             onClick={() => setSelectedImageIndex(index)}
-//           />
-//         ))}
-//       </div>
-
-//       {/* Display the selected image */}
-//       {images.length > 0 && (
-//         <img
-//           src={images[selectedImageIndex]?.imageUrl}
-//           className="w-full object-cover h-[500px] rounded-xl"
-//           alt={`Product image ${selectedImageIndex + 1}`}
-//         />
-//       )}
-//     </div>
-//   );
-// };
-
-// export default ImageGallery;
 import React, { useState, useEffect } from 'react';
 import { FaArrowLeft } from "react-icons/fa";
 import { FaArrowRight } from "react-icons/fa";
@@ -44,7 +7,7 @@ const ImageGallery = ({ productDetail }) => {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [imageDimensions, setImageDimensions] = useState({ width: 0, height: 0 });
-  const [screenWidth, setScreenWidth] = useState(window.innerWidth); // Track screen width
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 
   const images = productDetail?.images || [];
 
@@ -55,13 +18,11 @@ const ImageGallery = ({ productDetail }) => {
 
     window.addEventListener('resize', handleResize);
 
-    // Cleanup listener on component unmount
     return () => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
 
-  // Handle keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === "ArrowLeft") {
@@ -72,11 +33,9 @@ const ImageGallery = ({ productDetail }) => {
     };
 
     if (isModalOpen) {
-      // Add the event listener when the modal is open
       window.addEventListener("keydown", handleKeyDown);
     }
 
-    // Cleanup the event listener when the modal is closed
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
@@ -97,25 +56,23 @@ const ImageGallery = ({ productDetail }) => {
     );
   };
 
-  // Handle image load to set dimensions (this is where we get the width and height of the image)
   const handleImageLoad = (e) => {
     const { naturalWidth, naturalHeight } = e.target;
     setImageDimensions({ width: naturalWidth, height: naturalHeight });
   };
 
-  // Modal styling logic
   const modalStyles = () => {
     const { width, height } = imageDimensions;
     if (width > screenWidth * 0.9) {
       return {
-        width: `${screenWidth * 0.5}px`, // 90% of the screen width
-        height: `${height * (screenWidth * 0.5) / width}px`, // Maintain aspect ratio
+        width: `${screenWidth * 0.5}px`,
+        height: `${height * (screenWidth * 0.5) / width}px`,
       };
     }
     if (height > window.innerHeight * 0.4) {
       return {
-        width: `${width * (window.innerHeight * 0.4) / height}px`, // Maintain aspect ratio
-        height: `${window.innerHeight * 0.5}px`, // 90% of the screen height
+        width: `${width * (window.innerHeight * 0.4) / height}px`,
+        height: `${window.innerHeight * 0.5}px`,
       };
     }
     return {
@@ -124,7 +81,6 @@ const ImageGallery = ({ productDetail }) => {
     };
   };
 
-  // Function to close the modal when clicking outside
   const handleBackdropClick = (e) => {
     if (e.target === e.currentTarget) {
       closeModal();
@@ -132,9 +88,19 @@ const ImageGallery = ({ productDetail }) => {
   };
 
   return (
-    <div className="image-gallery flex flex-col md:flex-row md:items-center gap-4">
-      {/* Thumbnail navigation */}
-      <div className="thumbnail-container h-full flex md:flex-col gap-2">
+    <div className="image-gallery flex flex-col gap-4">
+      {/* Main image */}
+      {images.length > 0 && (
+        <img
+          src={images[selectedImageIndex]?.imageUrl}
+          className="w-full object-cover h-[500px] rounded-xl cursor-pointer"
+          alt={`Product image ${selectedImageIndex + 1}`}
+          onClick={openModal}
+        />
+      )}
+
+      {/* Thumbnail navigation - now below the main image */}
+      <div className="thumbnail-container flex flex-wrap justify-center gap-2">
         {images.map((image, index) => (
           <img
             key={index}
@@ -148,36 +114,24 @@ const ImageGallery = ({ productDetail }) => {
         ))}
       </div>
 
-      {/* Display the selected image */}
-      {images.length > 0 && (
-        <img
-          src={images[selectedImageIndex]?.imageUrl}
-          className="w-full object-cover h-[500px] rounded-xl cursor-pointer"
-          alt={`Product image ${selectedImageIndex + 1}`}
-          onClick={openModal}
-        />
-      )}
-
       {/* Modal */}
       {isModalOpen && (
         <div
           className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-50"
-          onClick={handleBackdropClick} // Close modal when clicking outside
+          onClick={handleBackdropClick}
         >
           <div
             className="relative bg-white rounded-lg shadow-lg overflow-hidden"
-            style={modalStyles()} // Dynamically set modal size
-            onClick={(e) => e.stopPropagation()} // Prevent closing on modal content click
+            style={modalStyles()}
+            onClick={(e) => e.stopPropagation()}
           >
-            {/* Full Image */}
             <img
               src={images[selectedImageIndex]?.imageUrl}
               className="w-full h-full object-contain"
               alt={`Full View Image ${selectedImageIndex + 1}`}
-              onLoad={handleImageLoad} // Capture image dimensions on load
+              onLoad={handleImageLoad}
             />
 
-            {/* Close Button */}
             <button
               className="opacity-50 z-60 absolute top-4 right-4 bg-transparent text-white text-3xl w-8 h-8 rounded-full flex justify-center items-center hover:scale-125 hover:text-orange-500 transition-all"
               onClick={closeModal}
@@ -185,7 +139,6 @@ const ImageGallery = ({ productDetail }) => {
               <span className="x-mark-image-zoomed text-lg">&#x274c;</span>
             </button>
 
-            {/* Navigation Buttons */}
             {images.length > 1 && (
               <>
                 <button

@@ -1,115 +1,3 @@
-
-
-// import React, { useState, useEffect, useContext } from 'react';
-// import Header from './components/Header';
-// import Footer from './components/Footer';
-// import { CategoriesList } from './Shared/Data'; // Assuming CategoriesList exists
-// import { db } from './../configs'; // Assuming db is configured
-// import Service from '@/Shared/Service'; // Assuming Service has FormatResult method
-// import { ProductListing, ProductImages } from './../configs/schema'; // Assuming ProductListing exists
-// import { eq } from 'drizzle-orm';
-// import ProductItemAggelies from './components/ProductItemAggelies';
-// import { CategoryContext } from './components/CategoriesContext'; // Assuming you have context for the category
-
-
-// const Aggelies = () => {
-//   const { selectedCategory, setSelectedCategory } = useContext(CategoryContext);
-//   const [productList, setProductList] = useState([]);
-//   const [sidebarOpen, setSidebarOpen] = useState(false);
-
-//   // Set the default category to the first category in the list
-//   useEffect(() => {
-//     if (!selectedCategory && CategoriesList.length > 0) {
-//       setSelectedCategory(CategoriesList[0].name); // Default to the first category
-//     }
-//   }, [selectedCategory, setSelectedCategory]);
-
-//   // Fetch products whenever the selected category changes
-//   useEffect(() => {
-//     if (selectedCategory) {
-//       fetchProducts(selectedCategory);
-//     }
-//   }, [selectedCategory]);
-
-//   const fetchProducts = async (category) => {
-//     const result = await db
-//       .select()
-//       .from(ProductListing)
-//       .innerJoin(ProductImages, eq(ProductListing.id, ProductImages.ProductListingId))
-//       .where(eq(ProductListing.category, category));
-
-//     const formattedResult = Service.FormatResult(result);
-//     setProductList(formattedResult);
-//   };
-
-//   // Close the sidebar when a category is clicked
-//   const handleCategoryClick = (category) => {
-//     setSelectedCategory(category.name);
-//     setSidebarOpen(false); // Close sidebar
-//   };
-
-//   return (
-//     <div className="aggelies-container">
-//       <Header />
-//       <div className="aggelies-main-content">
-//         {/* Mobile Sidebar Toggle Button */}
-//         <button
-//           className="mobile-sidebar-toggle"
-//           onClick={() => setSidebarOpen(!sidebarOpen)}
-//         >
-//           ☰ Κατηγορίες
-//         </button>
-
-//         {/* Sidebar */}
-//         <div className={`aggelies-sidebar ${sidebarOpen ? 'open' : ''}`}>
-//           <h2 className="aggelies-sidebar-title">Κατηγορίες</h2>
-//           <div className="aggelies-categories-list">
-//             {CategoriesList.map((category, index) => (
-//               <div
-//                 key={index}
-//                 className={`aggelies-category-item ${
-//                   selectedCategory === category.name ? 'aggelies-selected-category active-category' : ''
-//                 }`}
-//                 onClick={() => handleCategoryClick(category)} // Call the new handler
-//               >
-//                 <img
-//                   className={`category-images aggelies-category-image ${
-//                     selectedCategory === category.name ? 'active-category' : 'text-[#fcc178]'
-//                   }`}
-//                   src={category.icon}
-//                   alt={category.name}
-//                 />
-//                 <h2 className="aggelies-category-name">{category.name}</h2>
-//               </div>
-//             ))}
-//           </div>
-//         </div>
-
-//         {/* Product Display */}
-//         <div className="aggelies-product-display">
-//           <h2 className="aggelies-category-title">{selectedCategory}</h2>
-//           <div className="aggelies-product-grid">
-//             {productList?.length > 0 ? (
-//               productList.map((item, index) => (
-//                 <div key={index}>
-//                   <ProductItemAggelies product={item} />
-//                 </div>
-//               ))
-//             ) : (
-//               [1, 2, 3, 4].map((item, index) => (
-//                 <div key={index} className="aggelies-placeholder"></div>
-//               ))
-//             )}
-//           </div>
-//         </div>
-//       </div>
-//       <Footer />
-//     </div>
-//   );
-// };
-
-// export default Aggelies;
-
 import React, { useState, useEffect, useContext } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Header from './components/Header';
@@ -133,8 +21,8 @@ const Aggelies = () => {
   const typeoflist = searchParams.get('typeoflist');
   const price = searchParams.get('price');
 
+  // Set category from URL parameters or use context
   useEffect(() => {
-    // Set category from URL parameters if available, otherwise use context
     if (categoryFromUrl) {
       setSelectedCategory(categoryFromUrl);
     } else if (!selectedCategory && CategoriesList.length > 0) {
@@ -142,12 +30,26 @@ const Aggelies = () => {
     }
   }, [categoryFromUrl, selectedCategory, setSelectedCategory]);
 
+  // Fetch products whenever selectedCategory, typeoflist, or price changes
   useEffect(() => {
     if (selectedCategory) {
       fetchProducts();
     }
   }, [selectedCategory, typeoflist, price]);
 
+  // Helper function to get plan priority
+  const getPlanPriority = (plan) => {
+    switch (plan) {
+      case 'Boost+':
+        return 3;
+      case 'Boost':
+        return 2;
+      default: // 'Basic' or any other plan
+        return 1;
+    }
+  };
+
+  // Fetch products based on filters
   const fetchProducts = async () => {
     try {
       let conditions = [eq(ProductListing.category, selectedCategory)];
@@ -179,12 +81,49 @@ const Aggelies = () => {
         .where(and(...conditions));
 
       const formattedResult = Service.FormatResult(result);
-      setProductList(formattedResult);
+      
+      // Sort the products based on plan priority
+      const sortedProducts = formattedResult.sort((a, b) => {
+        const planPriorityA = getPlanPriority(a.userPlan);
+        const planPriorityB = getPlanPriority(b.userPlan);
+        return planPriorityB - planPriorityA;
+      });
+
+      setProductList(sortedProducts);
     } catch (error) {
       console.error('Error fetching products:', error);
     }
   };
 
+  // Render badges for the product
+  const renderBadges = (product) => {
+    const getPlanBadgeStyle = (plan) => {
+      switch(plan) {
+        case 'Boost+':
+          return 'bg-gradient-to-r from-yellow-400 via-orange-500 to-red-600 font-dancing-script font-bold';
+        case 'Boost':
+          return 'bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600 font-inter';
+        default:
+          return 'hidden';
+      }
+    };
+
+    return (
+      <>
+        <h2 className="bg-orange-500 px-3 py-1 rounded-full text-sm pb-1 text-white">
+          {product?.typeoflist === 'Αγορά' ? 'Πώληση' : 'Ενοικίαση'}
+        </h2>
+        
+        {product?.userPlan && product.userPlan !== 'Basic' && (
+          <h2 className={`${getPlanBadgeStyle(product.userPlan)} px-3 py-1 rounded-full text-sm pb-1 text-white`}>
+            {product.userPlan}
+          </h2>
+        )}
+      </>
+    );
+  };
+
+  // Handle category click in the sidebar
   const handleCategoryClick = (category) => {
     setSelectedCategory(category.name);
     setSidebarOpen(false);
@@ -193,6 +132,7 @@ const Aggelies = () => {
   return (
     <div className="aggelies-container">
       <Header />
+      
       <div className="aggelies-main-content">
         <button
           className="mobile-sidebar-toggle"
@@ -201,6 +141,7 @@ const Aggelies = () => {
           ☰ Κατηγορίες
         </button>
 
+        {/* Sidebar */}
         <div className={`aggelies-sidebar ${sidebarOpen ? 'open' : ''}`}>
           <h2 className="aggelies-sidebar-title">Κατηγορίες</h2>
           <div className="aggelies-categories-list">
@@ -225,6 +166,7 @@ const Aggelies = () => {
           </div>
         </div>
 
+        {/* Product Display */}
         <div className="aggelies-product-display">
           <h2 className="aggelies-category-title">
             {selectedCategory}
@@ -234,7 +176,7 @@ const Aggelies = () => {
             {productList?.length > 0 ? (
               productList.map((item, index) => (
                 <div key={index}>
-                  <ProductItemAggelies product={item} />
+                  <ProductItemAggelies product={item} badges={renderBadges(item)} />
                 </div>
               ))
             ) : (
@@ -245,6 +187,7 @@ const Aggelies = () => {
           </div>
         </div>
       </div>
+      
       <Footer />
     </div>
   );
