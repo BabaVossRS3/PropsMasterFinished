@@ -7,48 +7,58 @@ export async function updateUserPlan(userId, newPlan) {
     try {
         const now = new Date();
         
-        // Calculate new end date (30 days from now)
-        const endDate = new Date(now);
-        endDate.setDate(now.getDate() + 30);
-
-        // First, deactivate any existing active plans
-        await db
-            .update(UserPlan)
-            .set({ 
-                isActive: false,
-                endDate: now  // Set the end date of the old plan to now
-            })
-            .where(
-                and(
-                    eq(UserPlan.userId, userId),
-                    eq(UserPlan.isActive, true)
-                )
-            );
-
-        // Create new plan with fresh 30-day period
-        const newPlanValues = {
-            userId,
-            plan: newPlan,
-            startDate: now,
-            endDate: endDate,  // This will be 30 days from now
-            isActive: true
-        };
-
-        // Insert the new plan
-        await db
-            .insert(UserPlan)
-            .values(newPlanValues);
-
+        // Calculate end date based on plan type
+        const daysToAdd = newPlan === 'Boost+' ? 60 : 30;
+        const endDate = new Date(now.getTime());
+        endDate.setDate(endDate.getDate() + daysToAdd);
+        
+        // Format dates
+        const startDateFormatted = now.toISOString().split('T')[0];
+        const endDateFormatted = endDate.toISOString().split('T')[0];
+        
+        // First check if user has an existing plan
+        const existingPlan = await db
+            .select()
+            .from(UserPlan)
+            .where(eq(UserPlan.userId, userId))
+            .limit(1);
+        
+        if (existingPlan.length > 0) {
+            // Update existing plan
+            await db
+                .update(UserPlan)
+                .set({
+                    plan: newPlan,
+                    startDate: startDateFormatted,
+                    endDate: endDateFormatted,
+                    isActive: true
+                })
+                .where(eq(UserPlan.userId, userId));
+        } else {
+            // Insert new plan only if user doesn't have one
+            await db
+                .insert(UserPlan)
+                .values({
+                    userId,
+                    plan: newPlan,
+                    startDate: startDateFormatted,
+                    endDate: endDateFormatted,
+                    isActive: true
+                });
+        }
+        
         return {
-            ...newPlanValues,
-            remainingDays: 30  // Always starts with 30 days
+            plan: newPlan,
+            startDate: startDateFormatted,
+            endDate: endDateFormatted,
+            isActive: true,
+            remainingDays: daysToAdd
         };
     } catch (error) {
         console.error('Error updating user plan:', error);
         throw error;
     }
 }
-
 export const getCurrentUserPlan = async (userId) => {
     try {
       const result = await db

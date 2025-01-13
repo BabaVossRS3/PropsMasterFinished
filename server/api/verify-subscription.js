@@ -16,7 +16,6 @@ export default async function handler(req, res) {
       return res.status(400).json({ success: false, error: 'Session ID is missing' });
     }
 
-    // Retrieve the checkout session from Stripe
     const session = await stripe.checkout.sessions.retrieve(sessionId, {
       expand: ['subscription']
     });
@@ -24,41 +23,28 @@ export default async function handler(req, res) {
     if (session.payment_status === 'paid') {
       const planType = session.metadata.planName;
       const userId = session.metadata.userId;
-
-      // Calculate startDate and endDate
-      const startDate = new Date();
-      let endDate = new Date(startDate);
-      
-      // Calculate endDate based on plan type
       const daysToAdd = planType === 'Boost+' ? 60 : 30;
-      endDate = sql`CURRENT_DATE + INTERVAL '${daysToAdd} days'`;
 
       try {
-        // First, try to update existing record
-        const updateResult = await db
+        // First deactivate any existing active plans
+        await db
           .update(UserPlan)
           .set({
-            plan: planType,
-            startDate: sql`CURRENT_DATE`,
-            endDate: endDate,
-            isActive: true
+            isActive: false
           })
           .where(sql`${UserPlan.userId} = ${userId}`);
 
-        // If no record was updated, insert a new one
-        if (!updateResult || updateResult.rowCount === 0) {
-          await db
-            .insert(UserPlan)
-            .values({
-              userId: userId,
-              plan: planType,
-              startDate: sql`CURRENT_DATE`,
-              endDate: endDate,
-              isActive: true
-            });
-        }
+        // Insert new plan with calculated end date
+        await db
+          .insert(UserPlan)
+          .values({
+            userId: userId,
+            plan: planType,
+            startDate: sql`CURRENT_DATE`,
+            endDate: sql`CURRENT_DATE + INTERVAL '${daysToAdd} day'`,
+            isActive: true
+          });
 
-        // Return success response
         return res.json({
           success: true,
           planType: planType
