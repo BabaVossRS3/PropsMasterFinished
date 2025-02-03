@@ -1,8 +1,7 @@
-
 import Header from '@/components/Header';
 import React, { useEffect, useState } from 'react';
 import DetailHeader from '../components/detailHeader';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { ProductImages, ProductListing } from './../../../configs/schema';
 import { eq } from 'drizzle-orm';
 import { sql } from 'drizzle-orm';
@@ -19,7 +18,17 @@ import PromotedProducts from '@/components/PromotedProducts';
 
 const ListingDetail = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const location = useLocation();
   const [productDetail, setProductDetail] = useState();
+
+  // The previous location should be available in location.state
+  const previousLocation = location.state?.from;
+
+  useEffect(() => {
+    GetProductDetail();
+    window.scrollTo(0, 0);
+  }, [id]);
 
   const incrementViews = async (productId) => {
     try {
@@ -41,27 +50,17 @@ const ListingDetail = () => {
     }
   };
 
-  useEffect(() => {
-    GetProductDetail();
-    window.scrollTo(0, 0);
-  }, [id]);
-
   const GetProductDetail = async () => {
     try {
-      // First, get the base product details
       const result = await db
         .select()
         .from(ProductListing)
         .innerJoin(ProductImages, eq(ProductListing.id, ProductImages.ProductListingId))
         .where(eq(ProductListing.id, id));
 
-      console.log('Raw DB result:', result); // Debug log
-
       if (result && result.length > 0) {
         const resp = Service.FormatResult(result);
-        console.log('Formatted result:', resp[0]); // Debug log
         
-        // Get the current views count
         const viewsResult = await db
           .select({ views: ProductListing.views })
           .from(ProductListing)
@@ -70,17 +69,23 @@ const ListingDetail = () => {
 
         const currentViews = viewsResult[0]?.views || 0;
         
-        // Set the product detail with views
         setProductDetail({
           ...resp[0],
           views: currentViews
         });
 
-        // Increment views after getting product details
         await incrementViews(id);
       }
     } catch (error) {
       console.error('Error fetching product details:', error);
+    }
+  };
+
+  const handleBack = () => {
+    if (previousLocation) {
+      navigate(previousLocation.pathname + previousLocation.search);
+    } else {
+      navigate('/aggelies');
     }
   };
 
@@ -89,6 +94,12 @@ const ListingDetail = () => {
       <Header />
       <div className="listingDetails-container">
         <div className="listingDetails-content">
+          <button 
+            onClick={handleBack}
+            className="back-button px-4 py-2 bg-transparent items-center flex mb-4 text-lg font-medium text-gray-700 hover:text-gray-900"
+          >
+            ←Πίσω
+          </button>
           <DetailHeader productDetail={productDetail} />
           <div className="listingDetails-grid">
             {/* Left Section */}

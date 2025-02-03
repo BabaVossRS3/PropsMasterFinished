@@ -13,9 +13,7 @@
 .choosePlan-carousel {
     display: flex;
     justify-content: space-around; /* Distribute space evenly between slides */
-    align-items: flex-start; /* Align slides to the start */
     gap: 2%; /* Add space between slides */
-    margin: 0 auto; /* Center the carousel horizontally */
     transition: transform 0.5s ease-in-out; /* Smooth sliding transition */
 }
 
@@ -172,17 +170,16 @@
 }
 
 /* Mobile Styles */
-@media (max-width: 468px) {
+@media (max-width: 768px) {
     .choosePlan-carousel {
-        display: flex;
-        width: 100%; /* Ensure full width plus the margin space */
+        width: 100%;
+        flex-direction: column;
     }
 
     .choosePlan-slide {
-        flex-shrink: 0; /* Prevent shrinking, so each slide stays the same size */
-        width: 98%; /* Each slide should take up the full width of the container */
+        width: 100%; /* Each slide should take up the full width of the container */
         text-align: center;
-        margin-right: 10px; /* Add space between slides */
+        margin-bottom: 6%;
     }
 
     /* Optional: Center the text and price inside the slide */

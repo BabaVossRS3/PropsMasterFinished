@@ -26,6 +26,7 @@ import { Checkbox } from '@radix-ui/react-checkbox'
 
 const BoostListing = () => {
   const [formData, setFormData] = useState([]);
+  const [hasImages, setHasImages] = useState(false);
   const [triggerUploadImages, setTriggerUploadImages] = useState();
   const [searchParams] = useSearchParams();
   const [loader, setLoader] = useState(false);
@@ -70,6 +71,15 @@ const BoostListing = () => {
 
     setLoader(true);
     e.preventDefault();
+    if (!hasImages && mode !== 'edit') {
+      toast({
+          variant: "destructive",
+          title: "Απαιτείται Φωτογραφία",
+          description: "Παρακαλώ ανεβάστε τουλάχιστον μία φωτογραφία για την αγγελία σας.",
+      });
+      setLoader(false);
+      return;
+    }
     toast({
       title: "Παρακαλώ Περιμένετε...",
       description: "Η Αγγελία σας ανεβαίνει",
@@ -171,6 +181,7 @@ const BoostListing = () => {
                   ) : item.fieldType === "dropdown" ? (
                     <DropdownField
                       item={item}
+                      formData={formData}
                       handleInputChange={handleInputChange}
                       productInfo={productInfo}
                     />
@@ -196,14 +207,15 @@ const BoostListing = () => {
           <Separator className="my-6" />
           <UploadImages
             triggerUploadImages={triggerUploadImages}
-            productInfo={productInfo}
             plan="Boost"
+            productInfo={productInfo}
             mode={mode}
             setLoader={(v) => {
-              setLoader(v);
-              navigate("/");
+                setLoader(v);
+                navigate("/");
             }}
-          />
+            onImagesChange={setHasImages}  // Add this prop
+        />
 
           <div className="mt-10 flex justify-end">
             <Button type="button" disabled={loader} onClick={(e) => onSubmit(e)}>

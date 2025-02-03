@@ -38,7 +38,7 @@ const Category = () => {
             <div
               key={index}
               onClick={() => handleCategoryClick(category.name)}
-              className="border rounded-md p-3 items-center flex flex-col justify-around text-center cursor-pointer hover:shadow-md hover:scale-105 transition-all h-[120px]"
+              className=" border rounded-md p-3 items-center flex flex-col justify-around text-center cursor-pointer hover:shadow-md hover:scale-105 transition-all h-[120px]"
             >
               <img
                 src={category.icon}

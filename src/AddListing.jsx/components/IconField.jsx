@@ -17,6 +17,8 @@ import { FaCalendarAlt } from "react-icons/fa";
 import { MdPrecisionManufacturing } from "react-icons/md";
 import { FaPalette } from "react-icons/fa";
 import { RiDiscountPercentFill } from "react-icons/ri";
+import { FaCity } from "react-icons/fa";
+import { FaEnvelope } from "react-icons/fa";
 
 
 
@@ -42,12 +44,9 @@ const iconMap={
     FaCalendarAlt:<FaCalendarAlt />,
     MdPrecisionManufacturing:<MdPrecisionManufacturing />,
     FaPalette:<FaPalette />,
-    RiDiscountPercentFill:<RiDiscountPercentFill />
-
-
-
-
-
+    RiDiscountPercentFill:<RiDiscountPercentFill />,
+    FaCity:<FaCity />,
+    FaEnvelope:<FaEnvelope/>,
 }
 
 const IconField = ({icon}) => {

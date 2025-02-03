@@ -57,7 +57,7 @@
                 "Αναμνηστικά & Σπάνια Αντικείμενα",
                 "Αντίκες Οικιακών Σκευών",
                 "Βιβλία & Χάρτες",
-                "Αρχαιολογικά Αντικείμενα",
+                "Μουσικά Όργανα",
                 "Αντίκες Σαπούνι & Κεριά"
             ],
             "required":true,
@@ -224,7 +224,7 @@
                 "Μυτιλήνη",
                 "Νάξος",
                 "Νήσος Σάμος",
-                "Νομός Αιτωλοακαρνανίας",
+                "Αιτωλοακαρνανίας",
                 "Νότιο Αιγαίο",
                 "Ξάνθη",
                 "Πέλλα",
@@ -246,6 +246,27 @@
             "column":1,
             "icon":"IoLocation",
             "required":true
+        },
+        {
+            "label": "Δήμος",
+            "name": "municipality",
+            "fieldType": "dropdown",
+            "column": 1,
+            "icon": "FaCity",
+            "required": true,
+            "default": "Άγνωστο"
+        },
+        {
+            "label": "Ταχυδρομικός Κώδικας",
+            "name": "zipCode",
+            "fieldType": "number",
+            "column": 1,
+            "icon": "FaEnvelope",
+            "required": true,
+            "default": "00000",
+            "minlength": "5",
+            "maxlength": "5",
+            "pattern": "^[0-9]{5}$"
         }
 
     ]

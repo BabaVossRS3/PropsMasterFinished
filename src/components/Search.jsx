@@ -1,81 +1,7 @@
-// import React from 'react'
-// import { useState } from 'react';
-// import {
-//   Select,
-//   SelectContent,
-//   SelectItem,
-//   SelectTrigger,
-//   SelectValue,
-// } from "@/components/ui/select";
-// import { Separator } from "@/components/ui/separator";
-// import { BsSearch } from "react-icons/bs";
-// import { CategoriesList, PriceSell} from '@/Shared/Data';
-// import { Link } from 'react-router-dom';
 
-
-// const Search = () => {
-//   // Exoume thema me thn kathgoriopoihsh sthn anazhthsh mesw search bar. Diavazei kanonika 
-//   // kai gurizei content apo database alla den filtrarei mesw category , filtrarei mono mesw
-//   // typeoflist . Ousiastika exoume ena filtrarisma alla oxi swsto .
-//   const [category,setCategory] = useState();
-//   const [typeoflist,setTypeOfList] = useState();
-//   const [price,setPrice] = useState();
-
-
-  
-//   return (
-//     <div className='searchBar p-2 md:p-5 bg-white rounded-md flex-col md:flex md:flex-row gap-10 px-5 items-center w-[60%]'>
-        
-//       <Select onValueChange={(value)=>setCategory(value)}>
-//           <SelectTrigger  className='outline-none md:border-none w-full shadow-none text-lg'>
-//               <SelectValue placeholder="Κατηγορία" />
-//           </SelectTrigger>
-//           <SelectContent>
-//             {CategoriesList.map((maker, index) => (
-//               <SelectItem key={`${maker.id}-${index}`} value={maker.name}>
-//                 {maker.name}
-//               </SelectItem>
-//             ))}
-//           </SelectContent>
-//       </Select>
-
-//       <Separator orientation='vertical' className='hidden md:block' />
-
-//       <Select onValueChange={(value)=>setTypeOfList(value)}>
-//           <SelectTrigger  className='outline-none md:border-none w-full shadow-none text-lg'>
-//               <SelectValue placeholder=" Αγορά/Ενοικίαση" />
-//             </SelectTrigger>
-//           <SelectContent>
-//                 <SelectItem value="Αγορά">Αγορά</SelectItem>
-//                 <SelectItem value="Ενοικίαση">Ενοικίαση</SelectItem>
-//             </SelectContent>
-//       </Select>
-
-//       <Separator orientation='vertical' className='hidden md:block' />
-
-
-//       <Select onValueChange={(value)=>setPrice(value)}>
-//         <SelectTrigger className='outline-none md:border-none w-full shadow-none text-lg'>
-//           <SelectValue placeholder="Τιμή" />
-//         </SelectTrigger>
-//         <SelectContent>
-//           {PriceSell.map((maker, index) => (
-//             <SelectItem key={`${maker.id}-${index}`} value={maker.price}>
-//               {maker.price}
-//             </SelectItem>
-//           ))}
-//         </SelectContent>
-//       </Select>
-
-//       <Link to={`/search?category=${encodeURIComponent(category)}&typeoflist=${encodeURIComponent(typeoflist)}&price=${encodeURIComponent(price)}`}>
-//         <BsSearch className="text-[40px] cursor-pointer bg-primary rounded-full p-3 color-white searchIcon hover:scale-105 transition-all" />
-//       </Link>
-//     </div>
-//   )
-// }
-
-// export default Search
 import React, { useState } from 'react';
+
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
   Select,
   SelectContent,
@@ -86,93 +12,178 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { BsSearch } from "react-icons/bs";
 import { CategoriesList, PriceSell } from '@/Shared/Data';
-import { Link } from 'react-router-dom';
-
 
 const Search = () => {
-  const [category, setCategory] = useState();
-  const [typeoflist, setTypeOfList] = useState();
-  const [price, setPrice] = useState();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const [category, setCategory] = useState(searchParams.get('category') || '');
+  const [typeoflist, setTypeOfList] = useState(searchParams.get('typeoflist') || '');
+  const [price, setPrice] = useState(searchParams.get('price') || '');
 
-  // Generate query string based on selected values
-  const generateSearchParams = () => {
-    let searchParams = [];
-
+  const handleSearch = () => {
+    const newSearchParams = new URLSearchParams(searchParams);
+    
+    // Update or remove parameters based on selected values
     if (category) {
-      searchParams.push(`category=${encodeURIComponent(category)}`);
+      newSearchParams.set('category', category);
+    } else {
+      newSearchParams.delete('category');
     }
-
+    
     if (typeoflist) {
-      searchParams.push(`typeoflist=${encodeURIComponent(typeoflist)}`);
+      newSearchParams.set('typeoflist', typeoflist);
+    } else {
+      newSearchParams.delete('typeoflist');
     }
-
+    
     if (price) {
-      searchParams.push(`price=${encodeURIComponent(price)}`);
+      newSearchParams.set('price', price);
+    } else {
+      newSearchParams.delete('price');
     }
 
-    return searchParams.join('&');
+    // Navigate to aggelies page with the updated params
+    navigate(`/aggelies?${newSearchParams.toString()}`);
   };
 
   return (
-    <div className="searchBar p-2 md:p-5 bg-white bg-opacity-90 rounded-sm sm:rounded-md flex flex-col md:flex-row gap-4 md:gap-6 px-5 items-center justify-between w-full md:w-[60%]">
-  
-    {/* Category Selector */}
-    <Select onValueChange={(value) => setCategory(value)} className="w-full md:w-auto">
-      <SelectTrigger className="outline-none md:border-none w-full shadow-none text-lg">
-        <SelectValue placeholder="Κατηγορία" />
-      </SelectTrigger>
-      <SelectContent>
-        {CategoriesList.map((maker, index) => (
-          <SelectItem key={`${maker.id}-${index}`} value={maker.name}>
-            {maker.name}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
-  
-    <Separator orientation="vertical" className="hidden md:block" />
-  
-    {/* Type of Listing Selector */}
-    <Select onValueChange={(value) => setTypeOfList(value)} className="w-full md:w-auto">
-      <SelectTrigger className="outline-none md:border-none w-full shadow-none text-lg">
-        <SelectValue placeholder="Αγορά/Ενοικίαση" />
-      </SelectTrigger>
-      <SelectContent>
-        <SelectItem value="Αγορά">Αγορά</SelectItem>
-        <SelectItem value="Ενοικίαση">Ενοικίαση</SelectItem>
-      </SelectContent>
-    </Select>
-  
-    <Separator orientation="vertical" className="hidden md:block" />
-  
-    {/* Price Selector */}
-    <Select onValueChange={(value) => setPrice(value)} className="w-full md:w-auto">
-      <SelectTrigger className="outline-none md:border-none w-full shadow-none text-lg">
-        <SelectValue placeholder="Τιμή" />
-      </SelectTrigger>
-      <SelectContent>
-        {PriceSell.map((maker, index) => (
-          <SelectItem key={`${maker.id}-${index}`} value={maker.price}>
-            {maker.price}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
-  
-    {/* Search Button for Small Screens */}
-    <Link to={`/search?${generateSearchParams()}`} className="w-full md:hidden">
-      <button className="bg-primary text-white w-full py-3 rounded-md text-lg font-medium hover:scale-105 transition-all">
-        Αναζήτηση
-      </button>
-    </Link>
-  
-    {/* Search Icon for Large Screens */}
-    <Link to={`/search?${generateSearchParams()}`} className="w-[50%] hidden md:flex md:justify-end">
-      <BsSearch className="text-[40px] cursor-pointer bg-primary rounded-full p-3 text-white searchIcon hover:scale-105 transition-all w-full" />
-    </Link>
-  
-  </div>
-  
+    <div className="w-full md:w-[60%]">
+      <div className="bg-white bg-opacity-90 rounded-sm sm:rounded-md">
+        {/* Mobile Layout */}
+        <div className="flex flex-col space-y-4 p-4 md:hidden">
+          {/* Category Selector - Mobile */}
+          <div className="w-full">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Κατηγορία
+            </label>
+            <Select value={category} onValueChange={setCategory}>
+              <SelectTrigger className="w-full border border-gray-200 rounded-lg p-3">
+                <SelectValue placeholder="Επιλέξτε κατηγορία" />
+              </SelectTrigger>
+              <SelectContent className="max-h-64">
+                {CategoriesList.map((maker) => (
+                  <SelectItem 
+                    key={maker.id} 
+                    value={maker.name}
+                    className="p-3 hover:bg-gray-100"
+                  >
+                    {maker.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Type of Listing Selector - Mobile */}
+          <div className="w-full">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Τύπος Καταχώρησης
+            </label>
+            <Select value={typeoflist} onValueChange={setTypeOfList}>
+              <SelectTrigger className="w-full border border-gray-200 rounded-lg p-3">
+                <SelectValue placeholder="Αγορά/Ενοικίαση" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Αγορά" className="p-3 hover:bg-gray-100">Αγορά</SelectItem>
+                <SelectItem value="Ενοικίαση" className="p-3 hover:bg-gray-100">Ενοικίαση</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Price Selector - Mobile */}
+          <div className="w-full">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Τιμή
+            </label>
+            <Select value={price} onValueChange={setPrice}>
+              <SelectTrigger className="w-full border border-gray-200 rounded-lg p-3">
+                <SelectValue placeholder="Επιλέξτε εύρος τιμής" />
+              </SelectTrigger>
+              <SelectContent className="max-h-64">
+                {PriceSell.map((maker) => (
+                  <SelectItem 
+                    key={maker.id} 
+                    value={maker.price}
+                    className="p-3 hover:bg-gray-100"
+                  >
+                    {maker.price}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Search Button - Mobile */}
+          <button 
+            onClick={handleSearch}
+            className="w-full bg-primary text-white py-4 rounded-lg text-lg font-medium hover:opacity-90 transition-all flex items-center justify-center space-x-2"
+          >
+            <BsSearch className="text-xl" />
+            <span>Αναζήτηση</span>
+          </button>
+        </div>
+
+        {/* Desktop Layout */}
+        <div className="hidden md:flex flex-row gap-6 p-5 items-center justify-between">
+          {/* Category Selector */}
+          <div className="w-auto">
+            <Select value={category} onValueChange={setCategory}>
+              <SelectTrigger className="outline-none border-none w-full shadow-none text-lg">
+                <SelectValue placeholder="Κατηγορία" />
+              </SelectTrigger>
+              <SelectContent>
+                {CategoriesList.map((maker, index) => (
+                  <SelectItem key={`${maker.id}-${index}`} value={maker.name}>
+                    {maker.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <Separator orientation="vertical" className="h-[40px] w-[1px] bg-gray-400" />
+
+          {/* Type of Listing Selector */}
+          <div className="w-auto">
+            <Select value={typeoflist} onValueChange={setTypeOfList}>
+              <SelectTrigger className="outline-none border-none w-full shadow-none text-lg">
+                <SelectValue placeholder="Αγορά/Ενοικίαση" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Αγορά">Αγορά</SelectItem>
+                <SelectItem value="Ενοικίαση">Ενοικίαση</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <Separator orientation="vertical" className="h-[40px] w-[1px] bg-gray-400" />
+
+          {/* Price Selector */}
+          <div className="w-auto">
+            <Select value={price} onValueChange={setPrice}>
+              <SelectTrigger className="outline-none border-none shadow-none text-lg">
+                <SelectValue placeholder="Τιμή" />
+              </SelectTrigger>
+              <SelectContent>
+                {PriceSell.map((maker, index) => (
+                  <SelectItem key={`${maker.id}-${index}`} value={maker.price}>
+                    {maker.price}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Search Icon */}
+          <button
+            onClick={handleSearch}
+            className="flex justify-end w-[15%]"
+          >
+            <BsSearch className=" bg-transparent text-[40px] cursor-pointer rounded-full p-2 text-white searchIcon hover:scale-105 transition-all w-full" />
+          </button>
+        </div>
+      </div>
+    </div>
   );
 };
 

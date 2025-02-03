@@ -217,6 +217,7 @@ useEffect(() => {
                   // Warning when 5 or fewer days remain
                   if (currentPlan.remainingDays <= 5) {
                       toast({
+                          className:'bg-[#FF5F15] text-white',
                           title: 'Ειδοποίηση Συνδρομής',
                           description: `Η συνδρομή σας λήγει σε ${currentPlan.remainingDays} ημέρες.`,
                           status: 'warning',
@@ -230,6 +231,7 @@ useEffect(() => {
               // If user had a plan but it expired, show notification
               if (currentPlan) {
                   toast({
+                      variant:'destructive',
                       title: 'Λήξη Συνδρομής',
                       description: 'Η συνδρομή σας έχει λήξει. Παρακαλώ επιλέξτε νέο πακέτο.',
                       status: 'info',

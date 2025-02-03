@@ -1,0 +1,166 @@
+/* Mobile Controls */
+.mobile-controls {
+    display: none;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    width: 100%;
+  }
+  
+  .mobile-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 280px;
+    height: 100vh;
+    background: white;
+    z-index: 1001; /* Higher than modal-backdrop */
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+    overflow-y: auto;
+    padding: 1rem;
+    box-shadow: 4px 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .mobile-sidebar.open {
+    transform: translateX(0);
+  }
+  .mobile-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: white;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    height: 36px;
+  }
+  
+  .mobile-button:active {
+    transform: scale(0.98);
+  }
+  
+  .categories-button {
+    background-color: #ffb84d;
+  }
+  
+  .filters-button {
+    background-color: #4B5563;
+  }
+  
+  /* Mobile Filters Panel */
+  .mobile-filters {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: white;
+    padding: 1.5rem;
+    border-top-left-radius: 1.5rem;
+    border-top-right-radius: 1.5rem;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    transform: translateY(100%);
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .mobile-filters.open {
+    transform: translateY(0);
+  }
+  
+  .mobile-filters-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+  
+  .mobile-filters-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1F2937;
+  }
+  
+  .mobile-filters-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-height: calc(80vh - 4rem);
+    overflow-y: auto;
+  }
+  
+  /* Mobile View Controls Container */
+  .mobile-view-controls {
+    display: none;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .mobile-view-controls {
+      display: block;
+      margin-bottom: 1rem;
+    }
+    .sidebar {
+        display: none;
+    }
+      
+      .mobile-sidebar {
+        display: block;
+    }
+    .mobile-controls {
+      display: flex;
+      justify-content: flex-start;
+    }
+  
+    .mobile-filters {
+      display: block;
+    }
+    
+    /* Hide desktop filters */
+    .desktop-filters {
+      display: none;
+    }
+    
+    .aggelies-product-display {
+      margin-bottom: 5rem;
+    }
+    
+    /* Adjust other mobile elements */
+    .mobile-sidebar-toggle {
+      display: none; /* Hide old toggle button */
+    }
+  }
+  
+  /* Animation for filter panel */
+  @keyframes slideUp {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+  
+  /* Modal Backdrop */
+  .modal-backdrop {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  .modal-backdrop.open {
+    display: block;
+    opacity: 1;
+  }

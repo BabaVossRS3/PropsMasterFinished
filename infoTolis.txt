@@ -12,6 +12,8 @@ for database dashboard we use Drizzle and Neon
 for images we use firebase to ulpoad  5gb/free storage
 for chat we use sendbird and axios
 
-
-
-we need to make the enddtae countdown from 30 days and make the profile variables update via new userplan , also we will start using the stripe in real time . We need to make sure also that the ...4 o clock see you monday buddie
+Hostinger npm --version
+nginx -v
+v22.13.1
+10.9.2
+nginx version: nginx/1.24.0 (Ubuntu)

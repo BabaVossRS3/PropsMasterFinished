@@ -1,48 +1,45 @@
-import { Separator } from '@radix-ui/react-select'
-import React from 'react'
+import React from 'react';
+import { Separator } from '@radix-ui/react-select';
 import { PiHammer } from "react-icons/pi";
 import { MdOutlineCalendarMonth } from "react-icons/md";
 import { SiMaterialformkdocs } from "react-icons/si";
 import { IoIosColorFill } from "react-icons/io";
 
-
-
-
-
-
 const DetailHeader = ({ productDetail }) => {
-    return (
-      <div className=''>
-        {productDetail?.listingTitle ? (
-          <div className="">
-            <h2 className="listing-title-detail-header text-4xl font-bold">{productDetail?.listingTitle}</h2>
-            <Separator className="flex justify-center h-[1px] w-1/3 mt-3 bg-gradient-to-r from-transparent via-[#e38434] to-transparent" />
-  
-            <div className="flex gap-2 mt-3 detail-header-container">
-              <div className="flex gap-2 items-center p-1 px-3 bg-orange-100 rounded-full mt-3 text-primary">
-                <MdOutlineCalendarMonth className="h-7 w-7" />
-                <h2 className="text-primary">{productDetail?.year}</h2>
-              </div>
-              <div className="flex gap-2 items-center p-1 px-3 bg-orange-100 rounded-full mt-3 text-primary">
-                <PiHammer className="h-7 w-7" />
-                <h2 className="text-primary">{productDetail?.condition}</h2>
-              </div>
-              <div className="flex gap-2 items-center p-1 px-3 bg-orange-100 rounded-full mt-3 text-primary">
-                <SiMaterialformkdocs className="h-7 w-7" />
-                <h2 className="text-primary">{productDetail?.material}</h2>
-              </div>
-              <div className="flex gap-2 items-center p-1 px-3 bg-orange-100 rounded-full mt-3 text-primary">
-                <IoIosColorFill className="h-7 w-7" />
-                <h2 className="text-primary">{productDetail?.color}</h2>
-              </div>
-            </div>
+  return (
+    <div className="py-6">
+      {productDetail?.listingTitle ? (
+        <div className="space-y-6">
+          <div className="space-y-4">
+            <h2 className="text-4xl font-bold text-gray-900 tracking-tight leading-tight">
+              {productDetail?.listingTitle}
+            </h2>
+            <Separator className="h-px w-32 bg-gradient-to-r from-transparent via-orange-400 to-transparent opacity-70" />
           </div>
-        ) : (
-          // Placeholder for loading state
-          <div className="w-full rounded-xl h-[100px] bg-orange-100 animate-pulse"></div>
-        )}
-      </div>
-    );
-  };
-  
-  export default DetailHeader;
+
+          <div className="flex flex-wrap gap-3">
+            {[
+              { Icon: MdOutlineCalendarMonth, value: productDetail?.year },
+              { Icon: PiHammer, value: productDetail?.condition },
+              { Icon: SiMaterialformkdocs, value: productDetail?.material },
+              { Icon: IoIosColorFill, value: productDetail?.color }
+            ].map(({ Icon, value }, index) => (
+              <div
+                key={index}
+                className="flex items-center gap-2 px-4 py-2 bg-orange-100 rounded-full text-primary 
+                          transition-all duration-300 hover:bg-orange-200 hover:shadow-md"
+              >
+                <Icon className="h-5 w-5" />
+                <span className="text-sm font-medium">{value}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <div className="w-full h-24 bg-orange-100 rounded-xl animate-pulse" />
+      )}
+    </div>
+  );
+};
+
+export default DetailHeader;

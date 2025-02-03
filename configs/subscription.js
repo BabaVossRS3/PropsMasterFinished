@@ -1,9 +1,9 @@
 import Stripe from 'stripe';
-import { db } from './../configs/db.js';
+import { db } from 'configs/db.js';
 import { eq } from 'drizzle-orm';
-import { subscriptions } from './../configs/schema.js';
+import { subscriptions } from 'configs/schema.js';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_TEST_KEY);
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export async function POST(req) {
   try {

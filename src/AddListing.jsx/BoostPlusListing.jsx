@@ -28,6 +28,7 @@ const BoostPlusListing = () => {
   const [formData, setFormData] = useState([]);
   const [triggerUploadImages, setTriggerUploadImages] = useState();
   const [searchParams] = useSearchParams();
+  const [hasImages, setHasImages] = useState(false);
   const [loader, setLoader] = useState(false);
   const [productInfo, setProductInfo] = useState();
   const navigate = useNavigate();
@@ -70,6 +71,15 @@ const BoostPlusListing = () => {
 
     setLoader(true);
     e.preventDefault();
+    if (!hasImages && mode !== 'edit') {
+      toast({
+          variant: "destructive",
+          title: "Απαιτείται Φωτογραφία",
+          description: "Παρακαλώ ανεβάστε τουλάχιστον μία φωτογραφία για την αγγελία σας.",
+      });
+      setLoader(false);
+      return;
+    }
     toast({
       title: "Παρακαλώ Περιμένετε...",
       description: "Η Αγγελία σας ανεβαίνει",
@@ -167,6 +177,7 @@ const BoostPlusListing = () => {
                   ) : item.fieldType === "dropdown" ? (
                     <DropdownField
                       item={item}
+                      formData={formData}
                       handleInputChange={handleInputChange}
                       productInfo={productInfo}
                     />
@@ -192,14 +203,15 @@ const BoostPlusListing = () => {
           {/* Eikones */}
           <Separator className="my-6" />
           <UploadImages
-            triggerUploadImages={triggerUploadImages}
-            productInfo={productInfo}
-            mode={mode}
-            plan="Boost+"
-            setLoader={(v) => {
-              setLoader(v);
-              navigate("/");
-            }}
+              triggerUploadImages={triggerUploadImages}
+              plan="Boost+"
+              productInfo={productInfo}
+              mode={mode}
+              setLoader={(v) => {
+                  setLoader(v);
+                  navigate("/");
+              }}
+              onImagesChange={setHasImages}  // Add this prop
           />
 
           <div className="mt-10 flex justify-end">

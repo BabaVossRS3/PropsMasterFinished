@@ -87,7 +87,7 @@ const MyListings = ({ setTotalListings }) => {
       return;
     }
 
-    if (userPlan === 'Basic' && productList.length >= 5) {
+    if (userPlan === 'Basic' && productList.length >= 50) {
       toast({
         variant: "destructive",
         title: `Υπέρβαση Ορίων Πλάνου Basic`,
@@ -97,7 +97,7 @@ const MyListings = ({ setTotalListings }) => {
       return;
     }
 
-    if (userPlan === 'Boost' && productList.length >= 15) {
+    if (userPlan === 'Boost' && productList.length >= 50) {
       toast({
         variant: "destructive",
         title: `Υπέρβαση Ορίων Πλάνου Boost`,

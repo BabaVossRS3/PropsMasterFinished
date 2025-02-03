@@ -25,6 +25,7 @@ import { Checkbox } from '@radix-ui/react-checkbox'
 
 const BasicListing = () => {
   const [formData, setFormData] = useState([]);
+  const [hasImages, setHasImages] = useState(false);
   const [triggerUploadImages, setTriggerUploadImages] = useState();
   const [searchParams] = useSearchParams();
   const [loader, setLoader] = useState(false);
@@ -70,6 +71,15 @@ const BasicListing = () => {
 
     setLoader(true);
     e.preventDefault();
+    if (!hasImages && mode !== 'edit') {
+      toast({
+          variant: "destructive",
+          title: "Απαιτείται Φωτογραφία",
+          description: "Παρακαλώ ανεβάστε τουλάχιστον μία φωτογραφία για την αγγελία σας.",
+      });
+      setLoader(false);
+      return;
+    }
     toast({
       title: "Παρακαλώ Περιμένετε...",
       description: "Η Αγγελία σας ανεβαίνει",
@@ -153,7 +163,7 @@ const BasicListing = () => {
                   {item.fieldType === "text" || item.fieldType === "number" ? (
                     <InputField item={item} handleInputChange={handleInputChange} productInfo={productInfo} />
                   ) : item.fieldType === "dropdown" ? (
-                    <DropdownField item={item} handleInputChange={handleInputChange} productInfo={productInfo} />
+                    <DropdownField item={item} formData={formData} handleInputChange={handleInputChange} productInfo={productInfo} />
                   ) : item.fieldType === "textarea" ? (
                     <TextAreaField plan={"Basic"} item={item} handleInputChange={handleInputChange} productInfo={productInfo} />
                   ) : item.fieldType === "tel" ? (
@@ -167,14 +177,15 @@ const BasicListing = () => {
           {/* Eikones */}
           <Separator className="my-6" />
           <UploadImages
-            triggerUploadImages={triggerUploadImages}
-            plan="Basic"
-            productInfo={productInfo}
-            mode={mode}
-            setLoader={(v) => {
-              setLoader(v);
-              navigate("/");
-            }}
+              triggerUploadImages={triggerUploadImages}
+              plan="Basic"
+              productInfo={productInfo}
+              mode={mode}
+              setLoader={(v) => {
+                  setLoader(v);
+                  navigate("/");
+              }}
+              onImagesChange={setHasImages}  // Add this prop
           />
 
           <div className="mt-10 flex justify-end">

@@ -1,178 +1,226 @@
 /* Container and layout */
 .aggelies-container {
-    margin-bottom: 2.5rem;
-  }
-  
-  .aggelies-main-content {
-    display: flex;
-  }
-  
-  /* Sidebar styles */
-  .aggelies-sidebar {
-    width: 25%;
-    padding: 1.5rem;
-    border-right: 1px solid #ddd;
-    height: 100vh;
-    overflow-y: auto;
-  }
-  
-  .aggelies-sidebar-title {
-    font-weight: 300;
-    font-size: 2.5rem;
-    margin-top: 2.5rem;
-    margin-bottom: 2.5rem;
-  }
-  
-  .aggelies-categories-list {
-    width: 100%;
-  }
-  
-  .aggelies-category-item {
-    border: 1px solid #ddd;
-    display: flex;
-    gap: 0.75rem;
-    border-radius: 0.375rem;
-    padding: 0.75rem;
-    margin-bottom: 1rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
-  
-  .aggelies-category-item:hover {
-    background-color: #ffb84d;
-    color: #fff;
-    transform: scale(1.1);  
+  min-height: 100vh;
+  background-color: #f8f9fa;
+  display: flex;
+  flex-direction: column;
+}
 
-  }
-  
-  .aggelies-selected-category {
-    background-color: #ffb84d;
-    color: #ffffff;
-  }
-  
-  .aggelies-category-image {
-    width: 2.1875rem;
-    height: 1.875rem;
-    filter: brightness(0) saturate(100%) invert(67%) sepia(49%) saturate(608%) hue-rotate(347deg) brightness(98%) contrast(94%);
+.aggelies-main-content {
+  display: flex;
+  flex: 1;
+  position: relative;
+  max-width: 1920px;
+  margin: 0 auto;
+  width: 100%;
+  padding-top: 1rem;
+}
+/* Style for the "Όλα" icon */
+.aggelies-category-image svg {
+  color: #ffb84d; /* Default color matching your theme */
+  transition: all 0.3s ease;
+}
 
-  }
-  .aggelies-category-images{
-    transition: filter 0.3s ease;
-    filter: brightness(0) saturate(100%) invert(67%) sepia(49%) saturate(608%) hue-rotate(347deg) brightness(98%) contrast(94%);
+.aggelies-selected-category .aggelies-category-image svg {
+  color: white; /* White color when selected */
+}
 
-  }
-  .category-images {
-    filter: brightness(0) saturate(100%) invert(67%) sepia(49%) saturate(608%) hue-rotate(347deg) brightness(98%) contrast(94%);
-    transition: filter 0.3s ease;
-  }
-  .category-images.active-category {
-    filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%) contrast(100%);
-  }
-  
-  .aggelies-category-name.active-category {
-    color: white;
-  }
-  
-  .aggelies-category-name {
-    margin-top: 0.5rem;
-    font-size: 0.875rem;
-  }
-  
-  /* Product display */
-  .aggelies-product-display {
-    padding: 2.5rem;
-    width: 75%;
-  }
-  
-  .aggelies-category-title {
-    font-weight: 300;
-    font-size: 2.5rem;
-    padding-bottom: 1.5rem;
-  }
-  
-  .aggelies-product-grid {
-    display: grid;
-    grid-template-columns: repeat(1, 1fr);
-    gap: 1.25rem;
-    margin-top: 1.75rem;
-  }
-  
-  .aggelies-placeholder {
-    height: 25rem;
-    border-radius: 0.75rem;
-    background-color: #cbd5e1;
-    animation: aggelies-pulse 1.5s infinite;
-    width: 18.75rem;
-  }
-  /* Default Sidebar (for large screens) */
+/* Sidebar styles */
 .aggelies-sidebar {
-    width: 25%;
-    padding: 1.5rem;
-    border-right: 1px solid #ddd;
-    height: 100vh;
-    overflow-y: auto;
+  width: 400px;
+  padding: 1.5rem;
+  background: white;
+  height: calc(100vh - 80px);
+  position: sticky;
+  top: 1rem;
+  border-radius: 1rem;
+  margin-left: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  overflow-y: auto;
+}
+
+.aggelies-sidebar-title {
+  font-weight: 500;
+  font-size: 1.75rem;
+  margin-bottom: 2rem;
+  color: #2d3748;
+  border-bottom: 2px solid #f0f0f0;
+  padding-bottom: 0.75rem;
+}
+
+.aggelies-categories-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.aggelies-category-item {
+  border: 1px solid #edf2f7;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border-radius: 0.75rem;
+  padding: 0.875rem 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: white;
+}
+
+.aggelies-category-item:hover {
+  background-color: #fff3e6;
+  border-color: #ffb84d;
+  transform: translateX(5px);
+}
+
+.aggelies-selected-category {
+  background-color: #f97216;
+  border-color: #ffb84d;
+  box-shadow: 0 2px 12px rgba(255, 184, 77, 0.2);
+  color: white;
+}
+
+.aggelies-category-image {
+  width: 1.75rem;
+  height: 1.75rem;
+  transition: all 0.3s ease;
+  filter: brightness(0) saturate(100%) invert(67%) sepia(49%) saturate(608%) hue-rotate(347deg) brightness(98%) contrast(94%);
+}
+.aggelies-selected-category .aggelies-category-image {
+  filter: brightness(0) saturate(100%) invert(100%);
+}
+
+.aggelies-category-name {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+/* Product display */
+.aggelies-product-display {
+  flex: 1;
+  padding: 1rem 2rem 2rem;
+  min-height: calc(100vh - 80px);
+}
+
+.aggelies-category-title {
+  font-weight: 500;
+  font-size: 2rem;
+  color: #2d3748;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.aggelies-category-title::after {
+  content: "";
+  flex: 1;
+  height: 2px;
+  background: linear-gradient(to right, #edf2f7 0%, transparent 100%);
+  margin-left: 1rem;
+}
+
+.aggelies-product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  padding: 0.5rem;
+}
+
+.aggelies-placeholder {
+  height: 400px;
+  border-radius: 1rem;
+  background: linear-gradient(110deg, #ebebeb 8%, #f5f5f5 18%, #ebebeb 33%);
+  background-size: 200% 100%;
+  animation: aggelies-shine 1.5s linear infinite;
+}
+/* Mobile Sidebar */
+.mobile-sidebar-toggle {
+  display: none;
+  background-color: #ffb84d;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.25rem;
+  font-size: 1rem;
+  position: fixed;
+  bottom: 0.4rem;
+  left: 0.4rem;
+  z-index: 100;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .aggelies-product-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   }
-  
-  /* Mobile Sidebar Button (only visible on mobile screens) */
-  .mobile-sidebar-toggle {
+}
+
+@media (max-width: 768px) {
+  .aggelies-main-content {
+    padding-top: 4rem;
+  }
+
+  .aggelies-sidebar {
     display: none;
-    background-color: #E78430;
-    color: white;
-    border: none;
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 11;
-    border-radius: 0.375rem;
-    cursor: pointer;
+    width: 100%;
+    height: 100vh;
+    margin: 0;
+    z-index: 101;
+    border-radius: 0;
+    background-color: white;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
   }
-  
-  /* Mobile Responsive Styles */
-  @media (max-width: 768px) {
-    .aggelies-main-content {
-      flex-direction: column;
-    }
-  
-    .aggelies-sidebar {
-      display: none;
-      position: absolute;
-      top: 0;
-      left: 0;
-      background-color: white;
-      width: 100%;
-      height: 100%;
-      z-index: 10;
-      transition: transform 0.3s ease;
-      transform: translateX(-100%);
-    }
-  
-    .aggelies-sidebar.open {
-      display: block;
-      transform: translateX(0);
-    }
-  
-    .mobile-sidebar-toggle {
-      display: block;
-    }
-  
-    .aggelies-product-display {
-      width: 100%;
-      padding: 1rem;
-    }
+
+  .aggelies-sidebar.open {
+    display: block;
+    transform: translateX(0);
   }
-  
-  /* Placeholder animation */
-  @keyframes aggelies-pulse {
-    0% {
-      opacity: 1;
-    }
-    50% {
-      opacity: 0.5;
-    }
-    100% {
-      opacity: 1;
-    }
+
+  .mobile-sidebar-toggle {
+    display: flex;
   }
-  
+
+  .aggelies-product-display {
+    width: 100%;
+    padding: 1rem;
+  }
+
+  .aggelies-category-title {
+    font-size: 1.5rem;
+  }
+}
+
+/* Animations */
+@keyframes aggelies-shine {
+  to {
+    background-position-x: -200%;
+  }
+}
+
+/* Scrollbar Styling */
+.aggelies-sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.aggelies-sidebar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.aggelies-sidebar::-webkit-scrollbar-thumb {
+  background: #ffb84d;
+  border-radius: 3px;
+}
+
+.aggelies-sidebar::-webkit-scrollbar-thumb:hover {
+  background: #e78430;
+}

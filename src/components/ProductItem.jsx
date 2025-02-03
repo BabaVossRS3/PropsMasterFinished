@@ -1,4 +1,3 @@
-
 import { Separator } from '@radix-ui/react-select';
 import React from 'react';
 import { MdOutlineCategory } from "react-icons/md";
@@ -10,48 +9,75 @@ import { Link } from 'react-router-dom';
 const ProductItem = ({ product, badges }) => {    
   return (
     <Link to={'/listing-details/' + product?.id}>
-        <div className="text-[#242424] hover:scale-105 hover:shadow-md transition-all shadow-sm rounded-xl bg-[#f8f8f8] p-4 mx-auto max-w-xs sm:max-w-md h-auto">
+        <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden relative group max-w-sm mx-auto h-[450px]">
           {/* Badges Container */}
-          <div className="absolute m-4 flex gap-2">
+          <div className="absolute top-2 left-2 flex gap-1 z-20">
             {badges}
           </div>
 
-          <img 
-            src={product?.images[0]?.imageUrl} 
-            alt="Product" 
-            className="rounded-t-xl h-[200px] sm:h-[250px] object-cover w-full mb-4 shadow-md"
-          />
+          {/* Image Container with Overlay - Fixed Height */}
+          <div className="relative w-full h-[180px] overflow-hidden">
+            <img 
+              src={product?.images[0]?.imageUrl} 
+              alt="Product" 
+              className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          </div>
 
-          <div className="p-2 sm:p-4">
-            <h2 className="font-bold text-[#242424] text-xl sm:text-lg mb-2">{product?.listingTitle}</h2>
-            <Separator className="border-t-2" />
+          {/* Content Container - Fixed Height */}
+          <div className="p-3 sm:p-4 flex flex-col h-[270px]">
+            {/* Title with fixed height */}
+            <div className="h-14 flex items-center justify-center">
+              <h2 className="text-base text-center font-semibold text-gray-800 line-clamp-2">
+                {product?.listingTitle}
+              </h2>
+            </div>
             
-            <div className="hidden sm:block sm:grid sm:grid-cols-3 pt-5 pb-5 h-auto gap-4">
-              <div className="flex flex-col items-center">
-                <MdOutlineCategory className="text-xl mb-2" />
-                <h2 className="text-center"><span className="border-b border-solid pb-3">Κατηγορία</span><br /><br />{product?.category || 'Άγνωστη Κατηγορία'}</h2>
+            <Separator className="border-t border-gray-200 my-2" />
+            
+            {/* Info Grid with fixed height */}
+            <div className="grid grid-cols-3 gap-2 h-24">
+              <div className="flex flex-col justify-center items-center p-1 rounded-md bg-gray-50">
+                <MdOutlineCategory className="text-lg text-orange-500 mb-1" />
+                <span className="text-xs text-gray-600">Κατηγορία</span>
+                <h2 className="text-center text-xs font-medium text-gray-800 line-clamp-1">
+                  {product?.category || 'Άγνωστη Κατηγορία'}
+                </h2>
               </div>
-              <div className="flex flex-col items-center">
-                <MdOutlineSafetyCheck className="text-xl mb-2" />
-                <h2 className="text-center"><span className="border-b border-solid pb-3">Χρονολογία</span><br /><br />{product?.year}</h2>
+              <div className="flex flex-col items-center justify-center p-1 rounded-md bg-gray-50">
+                <MdOutlineSafetyCheck className="text-lg text-orange-500 mb-1" />
+                <span className="text-xs text-gray-600">Χρονολογία</span>
+                <h2 className="text-center text-xs font-medium text-gray-800">
+                  {product?.year}
+                </h2>
               </div>
-              <div className="flex flex-col items-center">
-                <IoLocationOutline className="text-xl mb-2" />
-                <h2 className="text-center"><span className="border-b border-solid pb-3">Περιοχή</span><br /><br />{product?.addressPosted}</h2>
+              <div className="flex flex-col items-center justify-center p-1 rounded-md bg-gray-50">
+                <IoLocationOutline className="text-lg text-orange-500 mb-1" />
+                <span className="text-xs text-gray-600">Περιοχή</span>
+                <h2 className="text-center text-xs font-medium text-gray-800 line-clamp-1">
+                  {product?.addressPosted}
+                </h2>
               </div>
             </div>
 
-            <div className="mt-4">
-              <h2 className="text-center text-lg font-medium">
+            <Separator className="border-t border-gray-200 my-2" />
+            
+            {/* Price and Button Container - Push to bottom */}
+            <div className="flex items-center justify-between gap-2 mt-auto">
+            <button className="bg-orange-500 hover:bg-orange-600 text-white px-3 py-2 rounded-md text-sm font-medium flex items-center gap-1 transition-all duration-300 hover:shadow group">
+                <span>Περισσότερα</span>
+                <IoOpenOutline className="group-hover:translate-x-1 transition-transform duration-300" />
+              </button>
+              
+              <div className="text-lg font-bold text-gray-800">
                 {product?.sellingPrice || 'Τιμή Μη Διαθέσιμη'}
-                {product?.typeoflist === 'Ενοικίαση' && '€ /μέρα'}
-                {product?.typeoflist !== 'Ενοικίαση' && '€'}
-              </h2>
-              <div className="text-center mt-3">
-                <h2 className="p-3 bg-orange-500 rounded text-white text-sm cursor-pointer hover:bg-orange-600 transition-all flex gap-1 items-center justify-center">      
-                  Δείτε Περισσότερα <IoOpenOutline className="mx-1" />
-                </h2>
+                <span className="text-gray-500 pl-1">
+                  {product?.typeoflist === 'Ενοικίαση' ? '€ /μέρα' : '€'}
+                </span>
               </div>
+              
+              
             </div>
           </div>
         </div>

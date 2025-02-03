@@ -1,4 +1,3 @@
-// SuccessPage.jsx
 import React, { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useToast } from "@/hooks/use-toast";
@@ -14,6 +13,14 @@ const SubscriptionSuccess = () => {
     const sessionId = searchParams.get('session_id');
     if (sessionId) {
       verifySubscription(sessionId);
+    } else {
+      toast({
+        variant: 'destructive',
+        title: "Σφάλμα",
+        description: "Δεν βρέθηκε αναγνωριστικό συνεδρίας.",
+        duration: 5000,
+      });
+      navigate('/choosePlan');
     }
   }, [searchParams]);
 
@@ -27,13 +34,34 @@ const SubscriptionSuccess = () => {
         body: JSON.stringify({ sessionId }),
       });
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+      // Get the response text first
+      const responseText = await response.text();
+      let data;
+      
+      try {
+        // Try to parse it as JSON
+        data = JSON.parse(responseText);
+      } catch (e) {
+        console.error('Failed to parse response as JSON:', responseText);
+        throw new Error('Invalid server response format');
       }
 
-      const data = await response.json();
-      
+      if (!response.ok) {
+        console.error('Server error details:', {
+          status: response.status,
+          statusText: response.statusText,
+          data
+        });
+        
+        throw new Error(data.error || `Server error: ${response.status}`);
+      }
+
       if (data.success) {
+        // Check if planType exists in the response
+        if (!data.planType) {
+          throw new Error('Plan type not found in response');
+        }
+
         // Set the user's plan in context
         setUserPlan(data.planType);
 
@@ -59,12 +87,25 @@ const SubscriptionSuccess = () => {
       }
     } catch (error) {
       console.error('Error verifying subscription:', error);
+      
+      // Provide more specific error messages based on error type
+      let errorMessage = "Παρακαλώ επικοινωνήστε με την υποστήριξη.";
+      
+      if (error.message.includes('Invalid server response format')) {
+        errorMessage = "Μη έγκυρη απάντηση από τον διακομιστή.";
+      } else if (error.message.includes('Failed to fetch')) {
+        errorMessage = "Πρόβλημα σύνδεσης με τον διακομιστή.";
+      } else if (error.message.includes('Plan type not found')) {
+        errorMessage = "Δεν βρέθηκε ο τύπος συνδρομής.";
+      }
+
       toast({
         variant: 'destructive',
         title: "Σφάλμα",
-        description: "Παρακαλώ επικοινωνήστε με την υποστήριξη.",
+        description: errorMessage,
         duration: 5000,
       });
+      
       // Redirect to choose plan on error
       navigate('/choosePlan');
     }

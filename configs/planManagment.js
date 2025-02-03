@@ -8,7 +8,7 @@ export async function updateUserPlan(userId, newPlan) {
         const now = new Date();
         
         // Calculate end date based on plan type
-        const daysToAdd = newPlan === 'Boost+' ? 60 : 30;
+        const daysToAdd = 30
         const endDate = new Date(now.getTime());
         endDate.setDate(endDate.getDate() + daysToAdd);
         

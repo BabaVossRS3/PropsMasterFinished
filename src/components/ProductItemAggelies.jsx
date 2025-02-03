@@ -1,4 +1,3 @@
-
 import { Separator } from '@radix-ui/react-select';
 import React from 'react';
 import { MdOutlineCategory } from "react-icons/md";
@@ -9,65 +8,80 @@ import { Link } from 'react-router-dom';
 
 const ProductItemAggelies = ({ product, badges }) => {    
     return (
-      <Link to={'/listing-details/' + product?.id}>
-        <div className="product-item-aggelies relative">
-          {/* Badges Container - Moved above the sale/rent badge and adjusted z-index */}
-          <div className="absolute top-4 left-4  flex gap-2 z-20">
+      <Link to={'/listing-details/' + product?.id} className="block">
+        <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden h-full relative group max-w-sm mx-auto">
+          {/* Badges Container */}
+          <div className="absolute top-2 left-2 flex gap-1 z-20">
             {badges}
           </div>
           
-          {/* Image */}
-          <img 
-            src={product?.images[0]?.imageUrl} 
-            alt="Product" 
-            className="rounded-t-xl h-[200px] sm:h-[250px] object-cover w-full mb-4 shadow-md"
-          />
+          {/* Image Container with Overlay */}
+          <div className="relative w-full overflow-hidden">
+            <img 
+              src={product?.images[0]?.imageUrl} 
+              alt="Product" 
+              className="w-full h-[180px] sm:h-[200px] object-cover transform group-hover:scale-105 transition-transform duration-500"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          </div>
           
-          <div className="right-side-aggelies p-4">
+          <div className="p-3 sm:p-4">
             {/* Listing Title */}
-            <h2 className='title-h2'>{product?.listingTitle}</h2>
-            <Separator className='border-t-2'/>
+            <h2 className="text-base font-semibold text-gray-800 mb-2 line-clamp-2 min-h-[2.5rem]">
+              {product?.listingTitle}
+            </h2>
             
-            <div className="content">
+            <Separator className="border-t border-gray-200 mb-3"/>
+            
+            {/* Info Grid */}
+            <div className="grid grid-cols-3 gap-2 mb-3">
               {/* Category */}
-              <div className="content-category">
-                <MdOutlineCategory className='text-l mb-2' />
-                <h2 className='text-center'>
-                  <span className='border-b border-solid pb-3'>Κατηγορία</span>
-                  <br/><br/>{product?.category || 'Άγνωστη Κατηγορία'}
-                </h2>
+              <div className="flex flex-col items-center p-1 rounded-md bg-gray-50 hover:bg-gray-100 transition-colors">
+                <MdOutlineCategory className="text-lg text-orange-500 mb-1" />
+                <span className="text-xs text-gray-600">Κατηγορία</span>
+                <h3 className="text-center text-xs font-medium text-gray-800 line-clamp-1">
+                  {product?.category || 'Άγνωστη Κατηγορία'}
+                </h3>
               </div>
+              
               {/* Year */}
-              <div className="content-category">
-                <MdOutlineSafetyCheck className='text-l mb-2' />
-                <h2 className='text-center'>
-                  <span className='border-b border-solid pb-3'>Χρονολογία</span>
-                  <br/><br/>{product?.year}
-                </h2>
+              <div className="flex flex-col items-center p-1 rounded-md bg-gray-50 hover:bg-gray-100 transition-colors">
+                <MdOutlineSafetyCheck className="text-lg text-orange-500 mb-1" />
+                <span className="text-xs text-gray-600">Χρονολογία</span>
+                <h3 className="text-center text-xs font-medium text-gray-800">
+                  {product?.year}
+                </h3>
               </div>
-              {/* Address */}
-              <div className="content-category">
-                <IoLocationOutline className='text-l mb-2' />
-                <h2 className='text-center'>
-                  <span className='border-b border-solid pb-3'>Περιοχή</span>
-                  <br/><br/>{product?.addressPosted}
-                </h2>
+              
+              {/* Location */}
+              <div className="flex flex-col items-center p-1 rounded-md bg-gray-50 hover:bg-gray-100 transition-colors">
+                <IoLocationOutline className="text-lg text-orange-500 mb-1" />
+                <span className="text-xs text-gray-600">Περιοχή</span>
+                <h3 className="text-center text-xs font-medium text-gray-800 line-clamp-1">
+                  {product?.addressPosted}
+                </h3>
               </div>
             </div>
-            <Separator className='border-t-2 my-2'/>
+
+            <Separator className="border-t border-gray-200 mb-3"/>
             
-            <div className="button-div-price-aggelies gap-10">
-              {/* Price */}
-              <h2 className="text-center text-[#242424] p-3">
-                {product?.sellingPrice || 'Τιμή Μη Διαθέσιμη'}
-                {product?.typeoflist === 'Ενοικίαση' && '€ /μέρα'}
-                {product?.typeoflist !== 'Ενοικίαση' && '€'}
-              </h2>
+            {/* Price and Button Container */}
+            <div className="flex items-center justify-between gap-2">
+               {/* See More Button */}
+               <button className="bg-orange-500 hover:bg-orange-600 text-white px-3 py-2 rounded-md text-sm font-medium flex items-center gap-1 transition-all duration-300 hover:shadow group">
+                <span>Περισσότερα</span>
+                <IoOpenOutline className="group-hover:translate-x-1 transition-transform duration-300" />
+              </button>
               
-              {/* See More Button */}
-              <h2 className='p-2 bg-orange-500 rounded text-white flex gap-1 items-center text-sm cursor-pointer hover:scale-105 transition-all'>      
-                Δείτε Περισσότερα <IoOpenOutline className='mx-1'/>
-              </h2>
+              {/* Price */}
+              <div className="text-lg font-bold text-gray-800">
+                {product?.sellingPrice || 'Τιμή Μη Διαθέσιμη'}
+                <span className="text-gray-500 pl-1">
+                  {product?.typeoflist === 'Ενοικίαση' ? '€ /μέρα' : '€'}
+                </span>
+              </div>
+              
+             
             </div>
           </div>
         </div>

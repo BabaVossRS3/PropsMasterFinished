@@ -1,7 +1,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
-import { createBrowserRouter, Router, RouterProvider } from 'react-router-dom'
+import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom'
 import Home from './home'
 import Contact from './contact'
 import { ClerkProvider } from '@clerk/clerk-react'
@@ -22,6 +22,8 @@ import BoostListing from './AddListing.jsx/BoostListing'
 import BoostPlusListing from './AddListing.jsx/BoostPlusListing'
 import { UserPlanProvider } from './context/UserPlanContext'
 import SubscriptionSuccess from './SuccessPage'
+import ReportUser from './components/ReportUser'
+import PrivacyPolicy from './components/policy/PrivacyPolicy'
 
 
 
@@ -30,6 +32,10 @@ const router = createBrowserRouter([
   {
     path: '/',
     element: <Home/>
+  },
+  {
+    path: '/user',
+    element: <Navigate to="https://propsmaster.gr" replace />
   },
   {
     path: '/contact',
@@ -68,6 +74,10 @@ const router = createBrowserRouter([
     element:<SearchByCategory/>
   },
   {
+    path:'/ReportUser',
+    element:<ReportUser/>
+  },
+  {
     path:'/search',
     element:<SearchByOptions/>
   },
@@ -78,6 +88,10 @@ const router = createBrowserRouter([
   {
     path:'/choosePlan',
     element:<ChoosePlan/>
+  },
+  {
+    path:'/Policy',
+    element:<PrivacyPolicy/>
   },
 ])
 
@@ -90,8 +104,11 @@ if (!PUBLISHABLE_KEY) {
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
-      <UserPlanProvider> 
+      <ClerkProvider 
+        publishableKey={PUBLISHABLE_KEY}
+        afterSignOutUrl="/"
+      >
+        <UserPlanProvider> 
         <CategoryProvider> {/* Add CategoryProvider here */}
           <RouterProvider router={router} />
         </CategoryProvider>

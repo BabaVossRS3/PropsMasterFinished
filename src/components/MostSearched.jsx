@@ -11,6 +11,7 @@ import ProductItem from './ProductItem'
 import { ProductImages, ProductListing } from './../../configs/schema'
 import { eq, desc } from 'drizzle-orm'
 import Service from '@/Shared/Service'
+import { inArray } from 'drizzle-orm'
 
 const MostSearched = () => {
     const [productList, setProductList] = useState([]);
@@ -28,41 +29,70 @@ const MostSearched = () => {
         };
 
         return (
-            <>
-                <h2 className="bg-orange-500 px-3 py-1 rounded-full text-sm pb-1 text-white">
+            <div className="absolute top-2 left-2 z-10 flex gap-2 flex-wrap max-w-[calc(100%-16px)] pointer-events-none">
+                <div className="bg-orange-500 px-3 py-1 rounded-full text-sm pb-1 text-white whitespace-nowrap">
                     {product?.typeoflist === 'Αγορά' ? 'Πώληση' : 'Ενοικίαση'}
-                </h2>
+                </div>
                 
                 {product?.userPlan && product.userPlan !== 'Basic' && (
-                    <h2 className={`${getPlanBadgeStyle(product.userPlan)} px-3 py-1 rounded-full text-sm pb-1 text-white`}>
+                    <div className={`${getPlanBadgeStyle(product.userPlan)} px-3 py-1 rounded-full text-sm pb-1 text-white whitespace-nowrap`}>
                         {product.userPlan}
-                    </h2>
+                    </div>
                 )}
-            </>
+            </div>
         );
     };
 
     useEffect(() => {
         GetPopularProductList();
-    }, [])
+    }, []);
 
     const GetPopularProductList = async () => {
         try {
             const result = await db
-                .select()
+                .select({
+                    id: ProductListing.id,
+                    listingTitle: ProductListing.listingTitle,
+                    typeoflist: ProductListing.typeoflist,
+                    sellingPrice: ProductListing.sellingPrice,
+                    negotiable: ProductListing.negotiable,
+                    views: ProductListing.views,
+                    userPlan: ProductListing.userPlan,
+                    year: ProductListing.year,
+                    category: ProductListing.category,
+                    addressPosted: ProductListing.addressPosted
+                })
                 .from(ProductListing)
-                .leftJoin(
-                    ProductImages,
-                    eq(ProductListing.id, ProductImages.ProductListingId)
-                )
-                .orderBy(desc(ProductListing.views)) // Sort by views instead of id
-                .limit(15); // Limit to 15 items
-
-            const resp = Service.FormatResult(result);
-            setProductList(resp);
+                .orderBy(desc(ProductListing.views))
+                .limit(15);
+    
+            const productIds = result.map(product => product.id);
+            
+            const images = await db
+                .select()
+                .from(ProductImages)
+                .where(inArray(ProductImages.ProductListingId, productIds));
+    
+            const productsWithImages = result.map(product => ({
+                ...product,
+                images: images.filter(img => img.ProductListingId === product.id)
+            }));
+    
+            setProductList(productsWithImages);
         } catch (error) {
             console.error('Error fetching most viewed products:', error);
         }
+    };
+
+    if (!productList || productList.length === 0) {
+        return (
+            <div className='bg-white z-50 mx-4 sm:mx-24 mb-10 sm:mb-20'>
+                <h2 className='font-light text-3xl text-center my-8 sm:my-16 text-[#B6A28E]'>
+                    Δημοφιλή Προϊόντα
+                </h2>
+                <div className="text-center text-gray-700 animate-pulse">Αναμονή Νέων Αγγελιών...</div>
+            </div>
+        );
     }
 
     return (
@@ -76,10 +106,18 @@ const MostSearched = () => {
                     {productList.map((item, index) => (
                         <CarouselItem 
                             key={index} 
-                            className={`w-full sm:basis-full md:basis-1/2 lg:basis-1/3`}
+                            className="w-full sm:basis-full md:basis-1/2 lg:basis-1/3 2xl:basis-1/4"
                         >
-                            <ProductItem badges={renderBadges(item)}
-                            product={item} key={index} />
+                            <div className="relative">
+                                {renderBadges(item)}
+                                <ProductItem 
+                                    product={{
+                                        ...item,
+                                        imageUrl: item.images?.imageUrl
+                                    }} 
+                                    key={index} 
+                                />
+                            </div>
                         </CarouselItem>
                     ))}
                 </CarouselContent>

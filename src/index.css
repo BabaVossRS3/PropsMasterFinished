@@ -70,8 +70,8 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 .category-images {
-  fill: #e38434; /* For SVG fill color */
-  color: #e38434; /* For general text-based icons */
+  filter: brightness(0) saturate(100%) invert(67%) sepia(49%) saturate(608%) hue-rotate(347deg) brightness(98%) contrast(94%);
+
 }
 .about-bg {
   position: relative;
@@ -102,6 +102,9 @@ button:focus-visible {
   display: grid;
   grid-template-columns: repeat(7, 1fr); /* 7 columns for larger screens */
   gap: 16px;
+}
+.category-images{
+
 }
 .HeroPage::before {
   content: '';
@@ -141,7 +144,6 @@ button:focus-visible {
 
 .searchIcon{
   color: white;
-  width: 60px;
 }
 .menu-li{
   color: #E07B39;
@@ -354,10 +356,6 @@ div[class$="-plan"]:hover {
 @media (max-width: 768px) {
   .HeroPage {
     height: 50vh; /* Set to 80vh on mobile screens */
-  }
-  .searchBar{
-    border-radius: 10px;
-    padding: 30px;
   }
   
   .choose-plan-container {
