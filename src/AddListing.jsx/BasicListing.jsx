@@ -14,13 +14,9 @@ import { BiLoaderAlt } from "react-icons/bi";
 import { useNavigate, useSearchParams} from 'react-router-dom'
 import { useToast } from "@/hooks/use-toast"
 import { useUser } from '@clerk/clerk-react'
-import { use } from 'react'
 import moment from 'moment';
 import { eq } from 'drizzle-orm'
 import Service from '@/Shared/Service'
-import CheckboxField from './components/CheckboxField'
-import features from './../Shared/features.json'
-import { Checkbox } from '@radix-ui/react-checkbox'
 
 
 const BasicListing = () => {
@@ -53,7 +49,6 @@ const BasicListing = () => {
     const resp = Service.FormatResult(result);
     setProductInfo(resp[0]);
     setFormData(resp[0]);
-    console.log(resp);
   };
 
   const handleInputChange = (name, value) => {
@@ -63,11 +58,7 @@ const BasicListing = () => {
     }));
   };
 
-  console.log("Form data being sent:", formData);
-  console.log("User data:", user);
-
   const onSubmit = async (e) => {
-    console.log("Data being sent to the backend:", formData);
 
     setLoader(true);
     e.preventDefault();
@@ -107,7 +98,6 @@ const BasicListing = () => {
       setLoader(false);
 
       if (result) {
-        console.log("Data Saved");
         setTriggerUploadImages(result[0]?.id);
         setLoader(false);
         toast({
@@ -124,7 +114,6 @@ const BasicListing = () => {
           .returning({ id: ProductListing.id });
 
         if (result) {
-          console.log("Data Saved");
           setTriggerUploadImages(result[0]?.id);
           setLoader(false);
           toast({

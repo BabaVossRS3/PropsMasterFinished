@@ -54,7 +54,6 @@ const BoostListing = () => {
     const resp = Service.FormatResult(result);
     setProductInfo(resp[0]);
     setFormData(resp[0]);
-    console.log(resp);
   };
 
   const handleInputChange = (name, value) => {
@@ -64,10 +63,8 @@ const BoostListing = () => {
     }));
   };
 
-  console.log("Form data being sent:", formData);
 
   const onSubmit = async (e) => {
-    console.log("Data being sent to the backend:", formData);
 
     setLoader(true);
     e.preventDefault();
@@ -107,7 +104,6 @@ const BoostListing = () => {
       setLoader(false);
 
       if (result) {
-        console.log("Data Saved");
         setTriggerUploadImages(result[0]?.id);
         setLoader(false);
         toast({
@@ -124,7 +120,6 @@ const BoostListing = () => {
           .returning({ id: ProductListing.id });
 
         if (result) {
-          console.log("Data Saved");
           setTriggerUploadImages(result[0]?.id);
           setLoader(false);
           toast({

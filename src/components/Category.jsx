@@ -4,19 +4,19 @@ import { useNavigate } from 'react-router-dom';
 import { CategoryContext } from './CategoriesContext';
 import { IoIosArrowDown } from "react-icons/io";
 import { IoIosArrowUp } from "react-icons/io";
+import styles from '../styles/Category.module.css'
 
 const Category = () => {
   const navigate = useNavigate();
-  const { setSelectedCategory } = useContext(CategoryContext); // Use context to manage selected category
-  const [isExpanded, setIsExpanded] = useState(false); // State to manage the expanded state
+  const { setSelectedCategory } = useContext(CategoryContext);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const handleCategoryClick = (categoryName) => {
-    setSelectedCategory(categoryName); // Update the selected category
-    navigate('/aggelies'); // Navigate to the /aggelies page
+    setSelectedCategory(categoryName);
+    navigate('/aggelies');
     window.scrollTo(0, 0);
   };
 
-  // Handle the button click to toggle expansion
   const toggleExpansion = () => {
     setIsExpanded(!isExpanded);
   };
@@ -27,32 +27,31 @@ const Category = () => {
         Αναζήτηση Ανά Κατηγορίες
       </h2>
 
-      {/* Wrapper for smooth height transition */}
       <div
         className={`overflow-y-auto transition-all duration-500 ease-in-out pb-5 ${
           isExpanded ? 'max-h-[9999px] border -border-b-2' : 'max-h-[300px] border -border-b-2'
         } md:border-0 sm:border sm:border-b-2 sm:border-t-0 `}
       >
-        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-6 px-4 sm:px-6 md:px-10 lg:px-40">
+        <div className="mt-4 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-6 px-4 sm:px-6 md:px-10 lg:px-40">
           {CategoriesList.map((category, index) => (
             <div
               key={index}
               onClick={() => handleCategoryClick(category.name)}
-              className=" border rounded-md p-3 items-center flex flex-col justify-around text-center cursor-pointer hover:shadow-md hover:scale-105 transition-all h-[120px]"
+              className={`${styles.categoryCard} rounded-md p-3 items-center flex flex-col justify-around text-center cursor-pointer h-[120px]`}
             >
-              <img
-                src={category.icon}
-                width={35}
-                height={30}
-                className="category-images"
-              />
+              <div className={styles.iconWrapper}>
+                <img
+                  src={category.icon}
+                  width={35}
+                  height={30}
+                  className="category-images"
+                />
+              </div>
               <h2 className="mt-4 text-sm text-[#493628]">{category.name}</h2>
             </div>
           ))}
         </div>
       </div>
-
-      {/* Button visible only on mobile */}
       
       <button
         onClick={toggleExpansion}
@@ -68,7 +67,6 @@ const Category = () => {
           </span>
         )}
       </button>
-
     </div>
   );
 };

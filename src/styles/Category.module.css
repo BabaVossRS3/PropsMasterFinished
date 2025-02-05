@@ -1,0 +1,22 @@
+.categoryCard {
+    transition: all 0.3s ease;
+    background: white;
+    border-radius: 8px;
+    border: 1px solid lightgray;
+    perspective: 1000px; /* For 3D flip effect */
+  }
+  
+  .categoryCard:hover {
+    animation: modernPulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    transform: scale(1.05);
+  }
+  
+  .iconWrapper {
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+  }
+  
+  .categoryCard:hover .iconWrapper {
+    transform: rotateY(180deg);
+  }
+  

@@ -14,7 +14,6 @@ import { BiLoaderAlt } from "react-icons/bi";
 import { useNavigate, useSearchParams} from 'react-router-dom'
 import { useToast } from "@/hooks/use-toast"
 import { useUser } from '@clerk/clerk-react'
-import { use } from 'react'
 import moment from 'moment';
 import { eq } from 'drizzle-orm'
 import Service from '@/Shared/Service'
@@ -54,7 +53,6 @@ const BoostPlusListing = () => {
     const resp = Service.FormatResult(result);
     setProductInfo(resp[0]);
     setFormData(resp[0]);
-    console.log(resp);
   };
 
   const handleInputChange = (name, value) => {
@@ -64,10 +62,8 @@ const BoostPlusListing = () => {
     }));
   };
 
-  console.log("Form data being sent:", formData);
 
   const onSubmit = async (e) => {
-    console.log("Data being sent to the backend:", formData);
 
     setLoader(true);
     e.preventDefault();
@@ -107,7 +103,6 @@ const BoostPlusListing = () => {
       setLoader(false);
 
       if (result) {
-        console.log("Data Saved");
         setTriggerUploadImages(result[0]?.id);
         setLoader(false);
         toast({
@@ -124,7 +119,6 @@ const BoostPlusListing = () => {
           .returning({ id: ProductListing.id });
 
         if (result) {
-          console.log("Data Saved");
           setTriggerUploadImages(result[0]?.id);
           setLoader(false);
           toast({

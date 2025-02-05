@@ -10,7 +10,6 @@ import { db } from './../../configs'
 import ProductItem from './ProductItem'
 import { ProductImages, ProductListing } from './../../configs/schema'
 import { eq, desc } from 'drizzle-orm'
-import Service from '@/Shared/Service'
 import { inArray } from 'drizzle-orm'
 
 const MostSearched = () => {
