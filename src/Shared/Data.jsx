@@ -1,6 +1,6 @@
 import chestOfDrawers from '../assets/chest-of-drawers.png';
 import starryNight from '../assets/starry-night.png';
-import lampDecor from '../assets/lamp-decor.png';
+import Decor from '../assets/modern.png';
 import necklace from '../assets/necklace.png';
 import cameraCrane from '../assets/camera-crane.png';
 import mirror from '../assets/mirror.png';
@@ -12,14 +12,16 @@ import householdAppliance from '../assets/household-appliance.png';
 import openBook from '../assets/open-book.png';
 import vase from '../assets/vase.png';
 import candle from '../assets/candle.png';
-import violin from '../assets/violin.png'
+import violin from '../assets/violin.png';
+import bicycle from '../assets/track-bicycle.png'
+
 
 // Import other icons similarly...
 
 export const CategoriesList = [
   { id: 1, name: 'Έπιπλα', icon: chestOfDrawers },
   { id: 2, name: 'Ζωγραφική & Τέχνη', icon: starryNight },
-  { id: 3, name: 'Μικροαντικείμενα & Διακοσμητικά', icon: lampDecor },
+  { id: 3, name: 'Μικροαντικείμενα & Διακοσμητικά', icon: Decor },
   { id: 4, name: 'Κοσμήματα & Ρολόγια', icon: necklace },
   { id: 5, name: 'Μεταλλικά Αντικείμενα', icon: cameraCrane },
   { id: 6, name: 'Αντίκες από Κεραμικά & Γυαλί', icon: mirror },
@@ -30,7 +32,8 @@ export const CategoriesList = [
   { id: 11, name: 'Αντίκες Οικιακών Σκευών', icon: householdAppliance },
   { id: 12, name: 'Βιβλία & Χάρτες', icon: openBook },
   { id: 13, name: 'Αντίκες Σαπούνι & Κεριά', icon: candle },
-  { id: 14, name: 'Μουσικά Όργανα', icon: violin }, // New category added
+  { id: 14, name: 'Μουσικά Όργανα', icon: violin },
+  { id: 15, name: 'Ποδήλατα', icon: bicycle },
 ];
 export const PriceSell = [
     {

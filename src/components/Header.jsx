@@ -110,7 +110,7 @@ const Header = () => {
         </div>
 
         {/* Desktop Navigation */}
-        <ul className="hidden md:flex gap-12">
+          <ul className="hidden md:flex gap-6 lg:gap-12">
           <Link
             to="/"
             className="menu-li font-medium text-lg hover:scale-105 transition-all cursor-pointer hover:text-primary"

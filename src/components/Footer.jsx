@@ -70,7 +70,7 @@ const Footer = () => {
 
         {/* Navigation Links */}
         <nav className="mt-12">
-          <ul className="flex flex-wrap justify-center gap-8">
+          <ul className="flex flex-wrap justify-center gap-4 md:gap-6 lg:gap-8">
             {navigationLinks.map((link) => (
               <li key={link.to}>
                 <Link

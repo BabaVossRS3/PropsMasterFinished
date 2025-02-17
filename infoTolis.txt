@@ -17,3 +17,13 @@ nginx -v
 v22.13.1
 10.9.2
 nginx version: nginx/1.24.0 (Ubuntu)
+
+sudo nano /etc/nginx/sites-available/propsmaster
+
+sudo nginx -t
+sudo systemctl reload nginx
+
+sudo chown -R www-data:www-data /var/www/propsmaster/frontend
+sudo chmod -R 755 /var/www/propsmaster/frontend
+
+tail -f /var/log/nginx/propsmaster-error.log /var/log/nginx/frontend-debug.log

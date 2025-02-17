@@ -1,72 +1,64 @@
-import React, { useState, useContext } from 'react';
-import { CategoriesList } from '@/Shared/Data';
+import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CategoryContext } from './CategoriesContext';
-import { IoIosArrowDown } from "react-icons/io";
-import { IoIosArrowUp } from "react-icons/io";
-import styles from '../styles/Category.module.css'
-
+import { CategoriesList } from '@/Shared/Data';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import styles from './../styles/Category.module.css'
 const Category = () => {
   const navigate = useNavigate();
   const { setSelectedCategory } = useContext(CategoryContext);
-  const [isExpanded, setIsExpanded] = useState(false);
-
+  
   const handleCategoryClick = (categoryName) => {
     setSelectedCategory(categoryName);
     navigate('/aggelies');
     window.scrollTo(0, 0);
   };
 
-  const toggleExpansion = () => {
-    setIsExpanded(!isExpanded);
-  };
-
   return (
-    <div className="mt-3">
+    <div className="w-full px-4 md:px-10 lg:px-40 mt-3">
       <h2 className="font-light text-3xl text-center mb-10 text-[#B6A28E]">
         Αναζήτηση Ανά Κατηγορίες
       </h2>
 
-      <div
-        className={`overflow-y-auto transition-all duration-500 ease-in-out pb-5 ${
-          isExpanded ? 'max-h-[9999px] border -border-b-2' : 'max-h-[300px] border -border-b-2'
-        } md:border-0 sm:border sm:border-b-2 sm:border-t-0 `}
+      <Carousel
+        className="w-full"
+        opts={{
+          align: "start",
+          loop: true,
+        }}
       >
-        <div className="mt-4 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-6 px-4 sm:px-6 md:px-10 lg:px-40">
+        <CarouselContent className="-ml-2 md:-ml-4">
           {CategoriesList.map((category, index) => (
-            <div
-              key={index}
-              onClick={() => handleCategoryClick(category.name)}
-              className={`${styles.categoryCard} rounded-md p-3 items-center flex flex-col justify-around text-center cursor-pointer h-[120px]`}
-            >
-              <div className={styles.iconWrapper}>
-                <img
-                  src={category.icon}
-                  width={35}
-                  height={30}
-                  className="category-images"
-                />
+            <CarouselItem key={index} className="pl-2 md:pl-4 md:basis-1/4 lg:basis-1/6">
+              <div 
+                className={`${styles.categoryCard} h-32 cursor-pointer`}
+                onClick={() => handleCategoryClick(category.name)}
+              >
+                <div className="flex flex-col items-center justify-center h-full p-6">
+                  <div className={`${styles.iconWrapper} mb-4 w-10 h-10 flex items-center justify-center`}>
+                    <img
+                      src={category.icon}
+                      alt={category.name}
+                      className="w-8 h-8 object-contain"
+                    />
+                  </div>
+                  <h2 className="text-sm text-[#493628] text-center">
+                    {category.name}
+                  </h2>
+                </div>
               </div>
-              <h2 className="mt-4 text-sm text-[#493628]">{category.name}</h2>
-            </div>
+            </CarouselItem>
           ))}
-        </div>
-      </div>
-      
-      <button
-        onClick={toggleExpansion}
-        className="block sm:hidden mt-5 mx-auto px-4 py-2 bg-transparent text-[#fcc178] font-medium rounded-md transition-all duration-300 focus:outline-none focus:ring-0"
-      >
-        {isExpanded ? (
-          <span className="flex flex-col items-center justify-center">
-            Σύρσιμο προς τα πάνω <IoIosArrowUp />
-          </span>
-        ) : (
-          <span className="flex flex-col items-center justify-center">
-            Εμφάνιση Όλων <IoIosArrowDown />
-          </span>
-        )}
-      </button>
+        </CarouselContent>
+        <CarouselPrevious className="hidden md:flex" />
+        <CarouselNext className="hidden md:flex" />
+      </Carousel>
     </div>
   );
 };

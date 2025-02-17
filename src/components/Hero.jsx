@@ -24,10 +24,10 @@ const Hero = () => {
       {/* Content Container */}
       <div className="relative flex flex-col items-center p-4 sm:p-6 md:p-8 lg:p-10 gap-4 min-h-[300px] sm:min-h-[350px] md:min-h-[400px] w-full text-center">
         <h2 className='flex justify-center items-center pt-4 text-lg sm:text-base md:text-lg text-[#F5F5DC]'>
-          Ο Κόσμος των Αντικών στα Χέρια σας
+          Ο Κόσμος των Props στα Χέρια σας
         </h2>
         <h2 className='text-xl sm:text-2xl md:text-3xl lg:text-4xl text-[#F5F5DC] font-bold'>
-          Βρείτε την Ιδανική Αντίκα
+          Βρείτε το Ιδανικό Αντικείμενο για σας
         </h2>
       
           <Search />
