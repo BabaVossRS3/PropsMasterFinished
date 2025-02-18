@@ -16,17 +16,18 @@
             "fieldType":"dropdown",
             "options":[
                 "Αγορά",
-                "Ενοικίαση"
+                "Ενοικίαση",
+                "Χαρίζεται"
             ],
             "required":true,
             "column":1,
             "icon":"GiBuyCard"
         },   
         {
-            "label":"Τιμή",
+            "label":"Τιμή (Εάν δεν επιθυμείτε να βάλετε τιμή , βάλτε 0)",
             "name":"sellingPrice",
             "fieldType":"number",
-            "required":true,
+            "required":false,
             "column":1,
             "icon":"FaEuroSign"
         },

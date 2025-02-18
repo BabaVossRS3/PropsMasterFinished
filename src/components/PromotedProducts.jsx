@@ -30,7 +30,9 @@ const PromotedProducts = () => {
         return (
             <div className="absolute top-2 left-2 z-10 flex gap-2 flex-wrap max-w-[calc(100%-16px)] pointer-events-none">
                 <div className="bg-orange-500 px-3 py-1 rounded-full text-sm pb-1 text-white whitespace-nowrap">
-                    {product?.typeoflist === 'Αγορά' ? 'Πώληση' : 'Ενοικίαση'}
+                    {product?.typeoflist === 'Αγορά' ? 'Πώληση' : 
+                    product?.typeoflist === 'Χαρίζεται' ? 'Χαρίζεται' : 
+                    'Ενοικίαση'}
                 </div>
                 
                 {product?.userPlan && product.userPlan !== 'Basic' && (

@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button'
 import React from 'react'
 import { FaMessage } from "react-icons/fa6";
-import ProductViews from '@/components/ProductViews'; // Make sure to adjust the import path
+import ProductViews from '@/components/ProductViews';
 
 const Pricing = ({productDetail}) => {
     const renderPlanBadge = (product) => {
@@ -20,6 +20,20 @@ const Pricing = ({productDetail}) => {
         );
     };
 
+    const renderPrice = () => {
+        if (!productDetail?.sellingPrice || productDetail.sellingPrice === '0') {
+            return "Ρωτήστε Τιμή";
+        }
+        return (
+            <>
+                {productDetail.sellingPrice} €
+                {productDetail?.typeoflist === 'Ενοικίαση' && (
+                    <span className="text-gray-500 text-lg font-light"> /μέρα</span>
+                )}
+            </>
+        );
+    };
+
     return (
         <div className='p-10 rounded-xl border shadow-md'>
             {productDetail ? (
@@ -28,10 +42,7 @@ const Pricing = ({productDetail}) => {
                     <div className="flex-1">
                         <h2 className="text-3xl">Τιμή</h2>
                         <h2 className="text-[#242424] text-4xl pt-4 w-full font-bold">
-                            {productDetail.sellingPrice} €
-                            {productDetail?.typeoflist === 'Ενοικίαση' && (
-                                <span className="text-gray-500 text-lg font-light"> /μέρα</span>
-                            )}
+                            {renderPrice()}
                         </h2>
 
                         {productDetail.negotiable === "Nαί" && (

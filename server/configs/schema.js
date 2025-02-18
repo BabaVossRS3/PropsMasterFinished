@@ -6,7 +6,7 @@ export const ProductListing = pgTable('ProductListing', {
   id: serial('id').primaryKey(),
   listingTitle: varchar('listingTitle').notNull(),
   typeoflist: varchar('typeoflist').notNull(),
-  sellingPrice: varchar('sellingPrice').notNull(),
+  sellingPrice: varchar('sellingPrice'),
   negotiable: varchar('negotiable').notNull(),
   category: varchar('category').notNull(),
   condition: varchar('condition'),

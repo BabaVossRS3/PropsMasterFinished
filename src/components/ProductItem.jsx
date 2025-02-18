@@ -71,10 +71,17 @@ const ProductItem = ({ product, badges }) => {
               </button>
               
               <div className="text-lg font-bold text-gray-800">
-                {product?.sellingPrice || 'Τιμή Μη Διαθέσιμη'}
-                <span className="text-gray-500 pl-1">
-                  {product?.typeoflist === 'Ενοικίαση' ? '€ /μέρα' : '€'}
-                </span>
+                {!product?.sellingPrice || product?.sellingPrice === '0' || product?.sellingPrice === 0 
+                  ? 'Ρωτηστε τιμή' 
+                  : (
+                    <>
+                      {product.sellingPrice}
+                      <span className="text-gray-500 pl-1">
+                        {product?.typeoflist === 'Ενοικίαση' ? '€ /μέρα' : '€'}
+                      </span>
+                    </>
+                  )
+                }
               </div>
               
               
